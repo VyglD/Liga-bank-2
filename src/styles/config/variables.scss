@@ -1,0 +1,27 @@
+$desktop-max: 1170px;
+$desktop-breakpoint: 1024px;
+$desktop-padding: 98px;
+$tablet-breakpoint: 768px;
+$tablet-padding: 45px;
+$mobile-breakpoint: 320px;
+$mobile-padding: 15px;
+
+:root {
+  --padding: #{$mobile-padding};
+
+  --color-black-0: #1F1E25;
+  --color-white-0: #FFFFFF;
+  --color-blue-0: #2C36F2;
+}
+
+@media (min-width: $tablet-breakpoint) {
+  :root {
+    --padding: #{$tablet-padding};
+  }
+}
+
+@media (min-width: $desktop-breakpoint) {
+  :root {
+    --padding: #{$desktop-padding};
+  }
+}

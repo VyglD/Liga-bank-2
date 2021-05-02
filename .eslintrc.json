@@ -1,0 +1,66 @@
+{
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "htmlacademy/es6",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "jsx-a11y",
+    "sonarjs",
+    "no-use-extend-native",
+    "promise",
+    "import"
+  ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    }
+  },
+  "rules": {
+    "sonarjs/cognitive-complexity": "error",
+    "sonarjs/no-identical-expressions": "error",
+    "no-use-extend-native/no-use-extend-native": "warn",
+    "promise/always-return": "error",
+    "promise/no-return-wrap": "error",
+    "promise/param-names": "error",
+    "promise/catch-or-return": "error",
+    "promise/no-native": "off",
+    "promise/no-nesting": "warn",
+    "promise/no-promise-in-callback": "warn",
+    "promise/no-callback-in-promise": "warn",
+    "promise/avoid-new": "warn",
+    "promise/no-new-statics": "error",
+    "promise/no-return-in-finally": "warn",
+    "promise/valid-params": "warn",
+    "import/no-unresolved": ["error", {"commonjs": true, "amd": true}],
+    "import/named": "error",
+    "import/namespace": "error",
+    "import/default": "error",
+    "import/export": "error",
+    "id-length": [
+      "error",
+      {
+        "min": 2,
+        "exceptions": ["i", "n", "j", "m", "k", "l", "x", "y", "z"]
+      }
+    ],
+    "prefer-const": "error",
+    "no-trailing-spaces": "error",
+    "no-multiple-empty-lines": [
+      "error",
+      {"max": 1, "maxEOF": 0, "maxBOF": 0}
+    ],
+    "no-multi-spaces": "error"
+  }
+}

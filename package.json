@@ -1,0 +1,41 @@
+{
+  "name": "liga-bank-2",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "5.12.0",
+    "@testing-library/react": "11.2.6",
+    "@testing-library/user-event": "12.8.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-scripts": "4.0.3",
+    "web-vitals": "1.1.1"
+  },
+  "scripts": {
+    "editorconfig": "npx editorconfig-checker",
+    "stylelint": "stylelint src/styles/**/*.{css,scss}",
+    "eslint": "eslint src/scripts/**/*.{js,jsx}",
+    "jest": "react-scripts test",
+    "jest:no-watch": "react-scripts test --watchAll=false",
+    "test": "npm run jest:no-watch && npm run stylelint && npm run editorconfig && npm run eslint",
+    "start": "react-scripts start",
+    "build": "react-scripts build && node preload.js",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "editorconfig": "0.15.3",
+    "editorconfig-checker": "4.0.2",
+    "eslint-config-htmlacademy": "3.0.0",
+    "eslint-plugin-no-use-extend-native": "0.5.0",
+    "eslint-plugin-promise": "5.1.0",
+    "eslint-plugin-sonarjs": "0.7.0",
+    "pre-commit": "1.2.2",
+    "sass": "1.32.12",
+    "stylelint": "13.13.1",
+    "stylelint-config-htmlacademy": "0.1.4"
+  },
+  "pre-commit": [
+    "build",
+    "test"
+  ]
+}
