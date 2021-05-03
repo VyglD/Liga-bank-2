@@ -3,9 +3,11 @@ html {
 }
 
 body {
+  --min-width: calc(#{$mobile-breakpoint} - (100vw - 100%));
+
   box-sizing: border-box;
   width: 100%;
-  min-width: calc(#{$mobile-breakpoint} - (100vw - 100%));
+  min-width: var(--min-width);
   height: 100%;
   min-height: 100vh;
   padding: 0;
@@ -61,12 +63,6 @@ p {
   font-family: inherit;
 }
 
-label {
-  font-family: inherit;
-
-  cursor: pointer;
-}
-
 ul {
   display: block;
 
@@ -76,8 +72,16 @@ ul {
   list-style: none;
 }
 
+label {
+  font-family: inherit;
+
+  cursor: pointer;
+}
+
 input {
   font-family: inherit;
+
+  color: inherit;
 }
 
 textarea {

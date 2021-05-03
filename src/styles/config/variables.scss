@@ -11,8 +11,12 @@ $desktop-max: $desktop-max-content + $tablet-padding * 2;
   --padding: #{$mobile-padding};
 
   --color-black-0: #1F1E25;
+  --color-black-1: rgba(0, 0, 0, 0.3);
+  --color-black-2: #1F1E25;
+  --color-black-3: #707C87;
   --color-white-0: #FFFFFF;
   --color-blue-0: #2C36F2;
+  --color-red-0: #F92015;
   --color-gray-0: #E5E5E5;
   --color-lightgray-0: #F6F7FF;
 }

@@ -1,4 +1,6 @@
 import React from "react";
+import Popup from "../popup/popup";
+import LoginForm from "../login-form/login-form";
 
 import logo from "../../../images/logo.svg";
 
@@ -6,6 +8,7 @@ const OPENED_CLASS = `prime-header__content--opened`;
 
 const PrimeHeader = () => {
   const primeHeaderContentRef = React.useRef();
+  const [isPopupOpen, setPopupStatus] = React.useState(false);
 
   const handleToggleButtonClick = React.useCallback(
       (evt) => {
@@ -23,6 +26,15 @@ const PrimeHeader = () => {
         primeHeaderContentRef.current.classList.remove(OPENED_CLASS);
       },
       []
+  );
+
+  const togglePopupVisibillity = React.useCallback(
+      (evt) => {
+        evt.preventDefault();
+
+        setPopupStatus((popupStatus) => !popupStatus);
+      },
+      [setPopupStatus]
   );
 
   return (
@@ -87,10 +99,27 @@ const PrimeHeader = () => {
             </li>
           </ul>
         </nav>
-        <button className="prime-header__login" type="button">
+        <button
+          className="prime-header__login"
+          type="button"
+          onClick={togglePopupVisibillity}
+        >
           <span>Войти в Интернет-банк</span>
         </button>
       </div>
+      {
+        isPopupOpen && (
+          <Popup
+            closeButtonClass={`login-form__close-button`}
+            contentWrapperClass={`login-form__outer-wrapper`}
+            onCloseButtonClick={togglePopupVisibillity}
+          >
+            <LoginForm
+              onCloseButtonClick={togglePopupVisibillity}
+            />
+          </Popup>
+        )
+      }
     </header>
   );
 };
