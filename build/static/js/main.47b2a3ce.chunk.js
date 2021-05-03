@@ -1,2 +1,0 @@
-(this["webpackJsonpliga-bank-2"]=this["webpackJsonpliga-bank-2"]||[]).push([[0],{10:function(e,n,t){"use strict";t.r(n);t(4);var c=t(0),r=t.n(c),a=t(3),i=t.n(a),o=t(1);var s=()=>Object(o.jsx)("h1",{children:"Hello world!"});i.a.render(Object(o.jsx)(r.a.StrictMode,{children:Object(o.jsx)(s,{})}),document.getElementById("root"))},4:function(e,n,t){}},[[10,1,2]]]);
-//# sourceMappingURL=main.47b2a3ce.chunk.js.map
