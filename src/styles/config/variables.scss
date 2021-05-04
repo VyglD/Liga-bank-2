@@ -3,9 +3,9 @@ $mobile-padding: 15px;
 $tablet-breakpoint: 768px;
 $tablet-padding: 45px;
 $desktop-breakpoint: 1024px;
-$desktop-padding: $tablet-padding;
+$desktop-padding: 98px;
 $desktop-max-content: 1170px;
-$desktop-max: $desktop-max-content + $tablet-padding * 2;
+$desktop-max: 1366px;
 
 :root {
   --padding: #{$mobile-padding};
@@ -16,6 +16,8 @@ $desktop-max: $desktop-max-content + $tablet-padding * 2;
   --color-black-3: #707C87;
   --color-white-0: #FFFFFF;
   --color-blue-0: #2C36F2;
+  --color-blue-1: #2028B6;
+  --color-blue-2: #2B36F2;
   --color-red-0: #F92015;
   --color-gray-0: #E5E5E5;
   --color-lightgray-0: #F6F7FF;

@@ -121,6 +121,8 @@
     content: "";
 
     display: block;
+
+    flex-shrink: 0;
     width: 14px;
     height: 16px;
 
@@ -260,6 +262,7 @@
   .prime-header__nav-list {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   .prime-header__nav-list-link {
@@ -292,7 +295,7 @@
   }
 
   .prime-header__nav {
-    margin-left: 97px;
+    margin: 0 97px;
   }
 
   .prime-header__nav-list-link {

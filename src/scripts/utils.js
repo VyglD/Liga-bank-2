@@ -18,9 +18,31 @@ const getPreviousArrayIndex = (currentIndex, arr) => {
   return (currentIndex + (arr.length - 1)) % arr.length;
 };
 
+const animate = ({timing, draw, duration}) => {
+  const start = performance.now();
+
+  const animateFraction = (time) => {
+    let timeFraction = (time - start) / duration;
+    if (timeFraction > 1) {
+      timeFraction = 1;
+    }
+
+    const progress = timing(timeFraction);
+
+    draw(progress);
+
+    if (timeFraction < 1) {
+      requestAnimationFrame(animateFraction);
+    }
+  };
+
+  requestAnimationFrame(animateFraction);
+};
+
 export {
   getFocusableElements,
   isEscKeyDown,
   getNextArrayIndex,
   getPreviousArrayIndex,
+  animate,
 };
