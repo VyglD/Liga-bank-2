@@ -120,37 +120,7 @@
 }
 
 .login-form__submit {
-  display: block;
-
-  box-sizing: border-box;
-  width: 100%;
-  padding: 19px 20px 17px;
   margin-top: 30px;
-
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 16px;
-
-  color: var(--color-lightgray-0, lightgray);
-  background-color: var(--color-blue-0, blue);
-
-  border: none;
-  border-radius: var(--border-radius);
-  outline: none;
-}
-
-.login-form__submit:not(:disabled) {
-  &:hover {
-    opacity: 0.6;
-  }
-
-  &:focus:not(:hover) {
-    text-decoration: underline;
-  }
-
-  &:active {
-    opacity: 0.3;
-  }
 }
 
 .login-form__password-link {
@@ -231,11 +201,7 @@
   }
 
   .login-form__submit {
-    padding-bottom: 20px;
     margin-top: 14px;
-
-    font-size: 18px;
-    line-height: 21px;
   }
 
   .login-form__close-button {

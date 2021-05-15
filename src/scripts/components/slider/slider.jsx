@@ -1,5 +1,6 @@
 import React from "react";
 import SlickSlider from "react-slick";
+import ActionButton from "../action-button/action-button";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -32,12 +33,13 @@ const Slider = () => {
         <div className="slider__slide slider__slide--one">
           <p className="slider__slide-title">Лига Банк</p>
           <p className="slider__slide-subtitle">Кредиты на любой случай</p>
-          <a
+          <ActionButton
             className="slider__slide-button"
             href="#credit-calculator"
+            inverted={true}
           >
             Рассчитать кредит
-          </a>
+          </ActionButton>
         </div>
         <div className="slider__slide slider__slide--two">
           <p className="slider__slide-title">Лига Банк</p>
@@ -48,12 +50,12 @@ const Slider = () => {
         <div className="slider__slide slider__slide--three">
           <p className="slider__slide-title">Лига Банк</p>
           <p className="slider__slide-subtitle">Всегда рядом</p>
-          <a
+          <ActionButton
             className="slider__slide-button"
             href="#contacts"
           >
             Найти отделение
-          </a>
+          </ActionButton>
         </div>
       </SlickSlider>
     </section>

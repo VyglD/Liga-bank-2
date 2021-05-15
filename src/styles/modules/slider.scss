@@ -55,9 +55,6 @@
     .slider__slide-button {
       padding: 14px 31px 13px;
       margin-top: 26px;
-
-      color: var(--color-black-0, black);
-      background-color: var(--color-lightgray-0, lightgray);
     }
   }
 
@@ -92,24 +89,13 @@
 }
 
 .slider__slide-button {
-  display: inline-block;
-
   padding: 15px 37px 12px;
   margin-top: 26px;
-
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 16px;
-
-  color: var(--color-lightgray-0, lightgray);
-  background-color: var(--color-blue-0, blue);
-
-  border-radius: 4px;
 }
 
 .slider__slides-points-list {
   position: absolute;
-  bottom: 7px;
+  bottom: 1px;
   left: 50%;
 
   display: flex;
@@ -186,13 +172,10 @@
   .slider__slide-button {
     padding: 15px 38px;
     margin-top: 29px;
-
-    font-size: 16px;
-    line-height: 19px;
   }
 
   .slider__slides-points-list {
-    bottom: 12px;
+    bottom: 6px;
 
     li {
       --point-size: 8px;
@@ -237,9 +220,6 @@
   .slider__slide-button {
     padding: 16px 48px;
     margin-top: 34px;
-
-    font-size: 18px;
-    line-height: 21px;
   }
 
   .slider__slides-points-list {

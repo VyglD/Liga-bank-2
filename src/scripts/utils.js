@@ -39,10 +39,18 @@ const animate = ({timing, draw, duration}) => {
   requestAnimationFrame(animateFraction);
 };
 
+const trimClasses = (classes) => {
+  return classes.reduce(
+      (result, className) => [result, className].join(` `).trim(),
+      ``
+  );
+};
+
 export {
   getFocusableElements,
   isEscKeyDown,
   getNextArrayIndex,
   getPreviousArrayIndex,
   animate,
+  trimClasses,
 };

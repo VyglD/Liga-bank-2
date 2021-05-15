@@ -1,4 +1,5 @@
 import React from "react";
+import ActionButton from "../action-button/action-button";
 import {STORAGE_KEY} from "../../constants";
 import PropTypes from "prop-types";
 
@@ -161,13 +162,13 @@ const LoginForm = (props) => {
           </div>
         </div>
         <div className="login-form__buttons-wrapper">
-          <button
+          <ActionButton
             className="login-form__submit"
             type="submit"
             onClick={saveAuthData}
           >
             Войти
-          </button>
+          </ActionButton>
           <a className="login-form__password-link" href="#blank">
             Забыли пароль?
           </a>

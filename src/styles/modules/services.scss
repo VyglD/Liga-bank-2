@@ -1,0 +1,420 @@
+.services {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+  width: 100%;
+  max-width: $desktop-max-content;
+  min-height: 362px;
+  padding: 55px 0 1px;
+  margin: 0 auto;
+
+  background-color: var(--color-lightgray-0, lightgray);
+}
+
+.services__tabs {
+  display: none;
+}
+
+.services__list {
+  flex-grow: 1;
+
+  background-color: var(--color-lightgray-0, lightgray);
+}
+
+.services__service-title {
+  margin: 0;
+  max-width: 80%;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.services__service {
+  box-sizing: border-box;
+  padding: 0 var(--padding);
+
+  background-position: right 43px;
+  background-size: 87px 113px;
+  background-repeat: no-repeat;
+
+  &--one {
+    background-image: url("../../images/piggybank-mobile.jpg");
+  }
+
+  &--two {
+    background-image: url("../../images/car-mobile.jpg");
+
+    .services__service-title {
+      max-width: 80%;
+    }
+  }
+
+  &--three {
+    background-image: url("../../images/lock-mobile.jpg");
+
+    .services__service-title {
+      max-width: 90%;
+    }
+  }
+
+  &--four {
+    background-image: url("../../images/phone-mobile.jpg");
+  }
+}
+
+.services__service-advantages-list {
+  max-width: 80%;
+  height: 100%;
+  margin-top: 21px;
+}
+
+.services__service-advantage {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+
+  font-size: 14px;
+  line-height: 18px;
+
+  &::before {
+    content: "";
+
+    display: block;
+
+    margin-top: 3px;
+    margin-right: 5px;
+
+    flex-shrink: 0;
+    width: 10px;
+    height: 9px;
+
+    background-image: url("../../images/check.svg");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}
+
+.services__service-button {
+  width: 100%;
+
+  padding: 14px 20px 13px;
+  margin-top: 13px;
+}
+
+.services__service-details {
+  max-width: 95%;
+  margin: 23px 0 0;
+
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.services__service-details-link {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.services__points-list {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  transform: translateX(-50%);
+
+  li {
+    --point-size: 6px;
+
+    display: inline-block;
+
+    width: var(--point-size);
+    height: var(--point-size);
+    margin: calc(var(--point-size) / 2);
+
+    background-color: var(--color-blue-1, blue);
+
+    border-radius: 50%;
+
+    &.slick-active {
+      background-color: var(--color-gray-1, gray);
+    }
+
+    button {
+      display: none;
+    }
+  }
+}
+
+@media (min-width: $tablet-breakpoint) {
+  .services {
+    min-height: 380px;
+  }
+
+  .services__service {
+    background-position: 91% 4px;
+    background-size: 289px 260px;
+
+    &--one {
+      background-image: url("../../images/piggybank-tablet.jpg");
+    }
+
+    &--two {
+      background-image: url("../../images/car-tablet.jpg");
+
+      .services__service-title {
+        max-width: 37%;
+      }
+    }
+
+    &--three {
+      background-image: url("../../images/lock-tablet.jpg");
+
+      .services__service-title {
+        max-width: 43%;
+      }
+    }
+
+    &--four {
+      background-image: url("../../images/phone-tablet.jpg");
+
+      .services__service-title {
+        max-width: 53%;
+      }
+
+      .services__service-advantages-list {
+        max-width: 47%;
+      }
+    }
+  }
+
+  .services__service-title {
+    max-width: 55%;
+
+    font-size: 18px;
+    line-height: 25px;
+  }
+
+  .services__service-advantages-list {
+    max-width: 55%;
+    margin-top: 22px;
+  }
+
+  .services__service-advantage {
+    margin-bottom: 15px;
+
+    font-size: 16px;
+    line-height: 21px;
+
+    &::before {
+      width: 13px;
+      height: 12px;
+      margin-top: 5px;
+      margin-right: 8px;
+    }
+  }
+
+  .services__service-button {
+    display: inline-block;
+
+    width: auto;
+    padding: 13px 31px 16px;
+    margin-top: 15px;
+  }
+
+  .services__service-details {
+    margin-top: 30px;
+
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .services__points-list {
+    bottom: 5px;
+
+    li {
+      --point-size: 8px;
+    }
+  }
+}
+
+@media (min-width: $desktop-breakpoint) {
+  .services {
+    padding-top: 60px;
+
+    background-color: transparent;
+  }
+
+  .services__tabs {
+    display: flex;
+  }
+
+  .services__tab-item {
+    flex-grow: 1;
+    max-width: 25%;
+
+    background-color: var(--color-white-0, white);
+
+    border-radius: 4px 4px 0 0;
+
+    &--one {
+      .services__tab-button::before {
+        background-image: url("../../images/vault.svg");
+      }
+    }
+
+    &--two {
+      .services__tab-button::before {
+        background-image: url("../../images/cards.svg");
+      }
+    }
+
+    &--three {
+      .services__tab-button::before {
+        background-image: url("../../images/security.svg");
+      }
+    }
+
+    &--four {
+      .services__tab-button::before {
+        background-image: url("../../images/phone.svg");
+      }
+    }
+
+    &--active {
+      background-color: var(--color-lightgray-0, lightgray);
+    }
+  }
+
+  .services__tab-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21px;
+    text-align: center;
+
+    background-color: transparent;
+
+    border: none;
+    outline: none;
+
+    &::before {
+      content: "";
+
+      display: block;
+
+      width: 34px;
+      height: 34px;
+      margin-right: 8px;
+
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+
+  .services__tab-button:not(:disabled) {
+    &:hover {
+      opacity: 0.6;
+      background-color: var(--color-lightgray-0, lightgray);
+    }
+
+    &:focus:not(:hover) {
+      text-decoration: underline;
+    }
+
+    &:active {
+      opacity: 0.2;
+    }
+  }
+
+  .services__service {
+    min-height: 410px;
+    padding: 52px 70px 0;
+
+    background-position: 81% 59px;
+    background-size: 440px 290px;
+
+    &--one {
+      background-image: url("../../images/piggybank-desktop.jpg");
+    }
+
+    &--two {
+      background-image: url("../../images/car-desktop.jpg");
+
+      .services__service-title {
+        max-width: 30%;
+      }
+    }
+
+    &--three {
+      background-image: url("../../images/lock-desktop.jpg");
+
+      .services__service-title {
+        max-width: 34%;
+      }
+    }
+
+    &--four {
+      background-image: url("../../images/phone-desktop.jpg");
+
+      .services__service-title {
+        max-width: 40%;
+      }
+
+      .services__service-advantages-list {
+        max-width: 36%;
+      }
+    }
+  }
+
+  .services__service-title {
+    max-width: 45%;
+
+    font-size: 22px;
+    line-height: 31px;
+  }
+
+  .services__service-advantages-list {
+    max-width: 40%;
+    margin-top: 28px;
+  }
+
+  .services__service-advantage {
+    font-size: 18px;
+    line-height: 23px;
+  }
+
+  .services__service-button {
+    padding: 16px 30px;
+    margin-top: 19px;
+
+    font-size: 16px;
+    line-height: 19px;
+  }
+
+  .services__service-details {
+    max-width: 35%;
+
+    font-size: 18px;
+    line-height: 25px;
+  }
+
+  .services__points-list {
+    display: none;
+  }
+}

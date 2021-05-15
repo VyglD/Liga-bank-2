@@ -1,0 +1,55 @@
+.action-button {
+  display: inline-block;
+
+  box-sizing: border-box;
+  width: auto;
+  padding: 19px 20px 17px;
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: center;
+
+  color: var(--color-lightgray-0, lightgray);
+  background-color: var(--color-blue-0, blue);
+
+  border: none;
+  border-radius: 4px;
+  outline: none;
+
+  &--inverted {
+    color: var(--color-black-0, black);
+    background-color: var(--color-lightgray-0, lightgray);
+  }
+}
+
+.action-button:not(:disabled) {
+  &:hover {
+    opacity: 0.6;
+  }
+
+  &:focus:not(:hover) {
+    text-decoration: underline;
+  }
+
+  &:active {
+    opacity: 0.2;
+  }
+}
+
+@media (min-width: $tablet-breakpoint) {
+  .action-button {
+    padding-bottom: 20px;
+
+    font-size: 16px;
+    line-height: 19px;
+  }
+}
+
+@media (min-width: $desktop-breakpoint) {
+  .action-button {
+    font-size: 18px;
+    line-height: 21px;
+  }
+}
