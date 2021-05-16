@@ -52,7 +52,7 @@ const Slider = () => {
           <p className="slider__slide-subtitle">Всегда рядом</p>
           <ActionButton
             className="slider__slide-button"
-            href="#contacts"
+            href="#departments"
           >
             Найти отделение
           </ActionButton>

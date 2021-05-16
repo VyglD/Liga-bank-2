@@ -1,0 +1,17 @@
+.departments {
+  height: 754px;
+
+  background-color: lightgray;
+}
+
+@media (min-width: $tablet-breakpoint) {
+  .departments {
+    height: 933px;
+  }
+}
+
+@media (min-width: $desktop-breakpoint) {
+  .departments {
+    height: 1094px;
+  }
+}
