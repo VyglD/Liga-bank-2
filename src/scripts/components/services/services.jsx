@@ -5,6 +5,7 @@ import ServiceTwo from "../service-two/service-two";
 import ServiceThree from "../service-three/service-three";
 import ServiceFour from "../service-four/service-four";
 import {trimClasses} from "../../utils";
+import {Breakpoint} from "../../constants";
 
 const SlickSettings = {
   dotsClass: `services__points-list`,
@@ -50,7 +51,7 @@ const Services = () => {
 
   const setScrolling = React.useCallback(
       () => {
-        if (window.innerWidth < 1024) {
+        if (window.innerWidth < Breakpoint.DESKTOP) {
           changeScrollingStatus(true);
           setDotsVisibility(true);
         } else {

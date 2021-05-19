@@ -19,8 +19,14 @@ const Key = {
 
 const STORAGE_KEY = `liga-bank-2`;
 
+const Breakpoint = {
+  DESKTOP: 1024,
+  TABLET: 768,
+};
+
 export {
   FOCUS_ELEMENTS,
   Key,
   STORAGE_KEY,
+  Breakpoint
 };
