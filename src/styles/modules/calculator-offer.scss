@@ -1,0 +1,139 @@
+.calculator-offer {
+  position: relative;
+  top: -139px;
+
+  box-sizing: border-box;
+  width: 45%;
+  max-width: 500px;
+  padding: 53px 60px 60px 58px;
+  margin-bottom: auto;
+
+  background-color: var(--color-lightgray-0, lightgray);
+}
+
+.calculator-offer__title {
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 31px;
+}
+
+.calculator-offer__description {
+  display: block;
+
+  width: 80%;
+  margin: 25px 0 0;
+
+  font-size: 16px;
+  line-height: 22px;
+
+  color: var(--color-black-4, black-4);
+}
+
+.calculator-offer__params {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.calculator-offer__param-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+
+  min-width: 155px;
+  margin-top: 25px;
+  margin-bottom: 3px;
+}
+
+.calculator-offer__param-title {
+  margin: 0;
+
+  font-size: 16px;
+  line-height: 22px;
+
+  color: var(--color-black-4, black);
+}
+
+.calculator-offer__param-value {
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 31px;
+}
+
+.calculator-offer__button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 32px;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+@media (max-width: $tablet) {
+  .calculator-offer {
+    position: relative;
+    top: 0;
+
+    width: 100%;
+    max-width: none;
+    margin-top: 39px;
+  }
+
+  .calculator-offer__title,
+  .calculator-offer__description {
+    box-sizing: border-box;
+    padding-right: 180px;
+  }
+
+  .calculator-offer__params {
+    max-width: 384px;
+  }
+}
+
+@media (max-width: $mobile) {
+  .calculator-offer {
+    padding: 35px 15px 40px;
+    margin-top: 28px;
+  }
+
+  .calculator-offer__title {
+    padding: 0 30px 0 0;
+
+    font-size: 18px;
+    line-height: 25px;
+  }
+
+  .calculator-offer__description {
+    width: 100%;
+    padding: 0;
+  }
+
+  .calculator-offer__params {
+    margin-top: 11px;
+  }
+
+  .calculator-offer__param-title {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .calculator-offer__param-wrapper {
+    margin-top: 11px;
+  }
+
+  .calculator-offer__param-value {
+    font-size: 18px;
+    line-height: 25px;
+  }
+
+  .calculator-offer__button {
+    margin-top: 28px;
+
+    font-size: 14px;
+    line-height: 20px;
+  }
+}

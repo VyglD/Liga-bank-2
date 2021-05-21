@@ -1,7 +1,8 @@
 import React from "react";
-import ActionButton from "../action-button/action-button";
-import {STORAGE_KEY} from "../../constants";
 import PropTypes from "prop-types";
+import ActionButton from "../action-button/action-button";
+import {toggleAnimateClass} from "../../utils";
+import {STORAGE_KEY} from "../../constants";
 
 import logo from "../../../images/logo-expanded.svg";
 
@@ -12,10 +13,15 @@ const PasswordStatus = {
 
 const STORAGE_AUTH_KEY = `${STORAGE_KEY}-auth`;
 
-const INVALID_INPUT_CLASS = `login-form__field-input--invalid`;
+const InvalidClass = {
+  INPUT: `login-form__field-input--invalid`,
+  CONTAINER_FORM: `login-form--invalid`,
+};
 
 const LoginForm = (props) => {
   const {onCloseButtonClick = () => {}} = props;
+
+  const formContainerRef = React.useRef();
 
   const loginInputRef = React.useRef();
   const passwordInputRef = React.useRef();
@@ -65,12 +71,12 @@ const LoginForm = (props) => {
         input.value = value;
 
         if (value) {
-          if (input.classList.contains(INVALID_INPUT_CLASS)) {
-            input.classList.remove(INVALID_INPUT_CLASS);
+          if (input.classList.contains(InvalidClass.INPUT)) {
+            input.classList.remove(InvalidClass.INPUT);
             input.placeholder = ``;
           }
         } else {
-          input.classList.add(INVALID_INPUT_CLASS);
+          input.classList.add(InvalidClass.INPUT);
           input.placeholder = `Заполните поле`;
 
           return false;
@@ -92,6 +98,12 @@ const LoginForm = (props) => {
       (evt) => {
         evt.preventDefault();
 
+        let isFormValid = true;
+        isFormValid = checkInputValue(loginInputRef.current) && isFormValid;
+        isFormValid = checkInputValue(passwordInputRef.current) && isFormValid;
+
+        toggleAnimateClass(formContainerRef.current, isFormValid, InvalidClass.CONTAINER_FORM);
+
         if (
           checkInputValue(loginInputRef.current)
           & checkInputValue(passwordInputRef.current)
@@ -105,7 +117,11 @@ const LoginForm = (props) => {
   );
 
   return (
-    <div className="login-form">
+    <div
+      ref={formContainerRef}
+      className="login-form"
+      onAnimationEnd={() => toggleAnimateClass(formContainerRef.current, true, InvalidClass.CONTAINER_FORM)}
+    >
       <img
         className="login-form__logo"
         src={logo}
@@ -117,6 +133,7 @@ const LoginForm = (props) => {
         className="login-form__form"
         action="https://echo.htmlacademy.ru/"
         method="POST"
+        onSubmit={saveAuthData}
       >
         <legend className="visually-hidden">
           Введите авторизационные данные

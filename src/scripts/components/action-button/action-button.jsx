@@ -7,16 +7,16 @@ const ActionButton = (props) => {
     children,
     inverted,
     className,
-    href = null,
-    type = `button`,
-    disabled = false,
-    onClick = () => {},
+    href,
+    type,
+    disabled,
+    onClick,
   } = props;
 
   const classes = [
     `action-button`,
+    className,
     inverted ? `action-button--inverted` : ``,
-    className ? className : ``,
   ];
 
   return (
@@ -42,6 +42,15 @@ const ActionButton = (props) => {
         </button>
       )
   );
+};
+
+ActionButton.defaultProps = {
+  inverted: false,
+  className: ``,
+  href: null,
+  type: `button`,
+  disabled: false,
+  onClick: () => {},
 };
 
 ActionButton.propTypes = {

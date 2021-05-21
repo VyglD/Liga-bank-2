@@ -72,7 +72,7 @@ const Departments = () => {
       <YMaps>
         <Map
           className="departments__map"
-          defaultState={mapState}
+          defaultState={{...mapState}}
         >
           {getPlacemark([61.253139, 73.394971])}
           {getPlacemark([54.991606, 73.371799])}

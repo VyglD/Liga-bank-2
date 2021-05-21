@@ -2,28 +2,29 @@
   box-sizing: border-box;
   width: 100%;
   max-width: $desktop-max-content;
-  padding: 10px 0 60px;
-  margin: 245px auto 0;
+  padding: 10px 0 110px;
+  margin: 73px auto 0;
 }
 
 .departments__title {
-  margin: 0 var(--padding);
+  margin: 0;
 
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 31px;
+  font-size: 41px;
+  font-weight: 700;
+  line-height: 57px;
+  text-align: left;
 }
 
 .departments__map {
   width: 100%;
-  height: 381px;
-  margin-top: 27px;
+  height: 462px;
+  margin-top: 56px;
 }
 
-@media (min-width: $tablet-breakpoint) {
+@media (max-width: $tablet) {
   .departments {
-    padding-bottom: 79px;
-    margin-top: 303px;
+    padding-bottom: 57px;
+    margin-top: 49px;
 
     padding-left: var(--padding);
     padding-right: var(--padding);
@@ -35,26 +36,25 @@
     font-size: 32px;
     line-height: 45px;
   }
-
-  .departments__map {
-    height: 462px;
-    margin-top: 34px;
-  }
 }
 
-@media (min-width: $desktop-breakpoint) {
+@media (max-width: $mobile) {
   .departments {
-    padding-left: 0;
+    width: 100%;
     padding-right: 0;
-    margin-top: 399px;
+    padding-bottom: 31px;
+    padding-left: 0;
+    margin-top: 33px;
   }
 
   .departments__title {
-    font-size: 41px;
-    line-height: 57px;
+    padding: 0 15px;
+
+    font-size: 22px;
+    line-height: 31px;
   }
 
   .departments__map {
-    margin-top: 56px;
+    height: 381px;
   }
 }

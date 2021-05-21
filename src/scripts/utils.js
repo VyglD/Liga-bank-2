@@ -1,4 +1,4 @@
-import {FOCUS_ELEMENTS, Key} from "./constants";
+import {FOCUS_ELEMENTS, Key, REGEX_DIGITS} from "./constants";
 
 const getFocusableElements = (container) => {
   return Array.from(
@@ -8,6 +8,14 @@ const getFocusableElements = (container) => {
 
 const isEscKeyDown = (evt) => {
   return evt.key === Key.ESC;
+};
+
+const isLeftKey = (evt) => {
+  return evt.code === Key.LEFT;
+};
+
+const isRightKey = (evt) => {
+  return evt.code === Key.RIGHT;
 };
 
 const getNextArrayIndex = (currentIndex, arr) => {
@@ -46,11 +54,56 @@ const trimClasses = (classes) => {
   );
 };
 
+const getCleanDigit = (dirtyValue) => {
+  if (typeof dirtyValue === `number`) {
+    return dirtyValue;
+  }
+
+  const cleanDigit = parseInt(
+      String(dirtyValue).split(``).filter((char) => REGEX_DIGITS.test(char)).join(``),
+      10
+  );
+
+  if (isNaN(cleanDigit)) {
+    return 0;
+  }
+
+  return cleanDigit;
+};
+
+const getFormatedDigitString = (value) => {
+  if (typeof value === `string`) {
+    value = getCleanDigit(value);
+  }
+
+  return value.toLocaleString();
+};
+
+const createFormatedValueString = (value, postfix) => {
+  return `${getFormatedDigitString(value)}${postfix}`;
+};
+
+const toggleAnimateClass = (form, isValid, invalidClass) => {
+  if (isValid && (form.classList.contains(invalidClass))) {
+    form.classList.remove(invalidClass);
+  } else {
+    if (!form.classList.contains(invalidClass)) {
+      form.classList.add(invalidClass);
+    }
+  }
+};
+
 export {
   getFocusableElements,
   isEscKeyDown,
+  isLeftKey,
+  isRightKey,
   getNextArrayIndex,
   getPreviousArrayIndex,
   animate,
   trimClasses,
+  getCleanDigit,
+  getFormatedDigitString,
+  createFormatedValueString,
+  toggleAnimateClass,
 };

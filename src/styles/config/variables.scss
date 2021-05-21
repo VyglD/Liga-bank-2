@@ -7,6 +7,9 @@ $desktop-padding: 98px;
 $desktop-max-content: 1170px;
 $desktop-max: 1366px;
 
+$mobile: $tablet-breakpoint - 1px;
+$tablet: $desktop-breakpoint - 1px;
+
 :root {
   --padding: #{$mobile-padding};
 
@@ -14,6 +17,7 @@ $desktop-max: 1366px;
   --color-black-1: rgba(0, 0, 0, 0.3);
   --color-black-2: #1F1E25;
   --color-black-3: #707C87;
+  --color-black-4: #394959;
   --color-white-0: #FFFFFF;
   --color-blue-0: #2C36F2;
   --color-blue-1: #2028B6;
@@ -21,6 +25,8 @@ $desktop-max: 1366px;
   --color-red-0: #F92015;
   --color-gray-0: #E5E5E5;
   --color-gray-1: #E0E0E0;
+  --color-gray-2: #C1C2CA;
+  --color-gray-3: #C4C4C4;
   --color-lightgray-0: #F6F7FF;
 }
 

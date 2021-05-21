@@ -3,7 +3,7 @@ html {
 }
 
 body {
-  --min-width: calc(#{$mobile-breakpoint} - (100vw - 100%));
+  --min-width: #{$mobile-breakpoint};
 
   box-sizing: border-box;
   width: 100%;

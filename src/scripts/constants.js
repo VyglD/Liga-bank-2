@@ -15,6 +15,10 @@ const Key = {
   SHIFT: `Shift`,
   UP: `ArrowUp`,
   DOWN: `ArrowDown`,
+  LEFT: `ArrowLeft`,
+  RIGHT: `ArrowRight`,
+  BACKSPACE: `Backspace`,
+  DELETE: `Delete`,
 };
 
 const STORAGE_KEY = `liga-bank-2`;
@@ -24,9 +28,31 @@ const Breakpoint = {
   TABLET: 768,
 };
 
+const REGEX_DIGITS = /^\d+$/;
+
+const CreditType = {
+  MORTAGE: `Ипотечное кредитование`,
+  AUTO: `Автомобильное кредитование`,
+};
+
+const Postfix = {
+  RUB: ` рублей`,
+  PERCENT: `%`,
+  DURATION: ` лет`,
+};
+
+const Percentage = {
+  NULL: 0,
+  ENTIRE: 100,
+};
+
 export {
   FOCUS_ELEMENTS,
   Key,
   STORAGE_KEY,
-  Breakpoint
+  Breakpoint,
+  REGEX_DIGITS,
+  CreditType,
+  Postfix,
+  Percentage,
 };
