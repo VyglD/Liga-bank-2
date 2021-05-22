@@ -12,7 +12,7 @@
   box-sizing: border-box;
   width: 100%;
   max-width: #{$desktop-max};
-  padding: 15px var(--padding) 16px;
+  padding: 13px var(--padding) 14px;
   margin: 0 auto;
 }
 
@@ -114,7 +114,7 @@
   outline: none;
 
   & span {
-    display: none;
+    font-size: 0;
   }
 
   &::before {
@@ -125,6 +125,7 @@
     flex-shrink: 0;
     width: 14px;
     height: 16px;
+    margin-top: 4px;
 
     background-image: url("../../images/login.svg");
     background-position: center;
@@ -311,7 +312,7 @@
     }
 
     & span {
-      display: block;
+      font-size: 16px;
     }
   }
 

@@ -15,6 +15,10 @@ const Key = {
   SHIFT: `Shift`,
   UP: `ArrowUp`,
   DOWN: `ArrowDown`,
+  LEFT: `ArrowLeft`,
+  RIGHT: `ArrowRight`,
+  BACKSPACE: `Backspace`,
+  DELETE: `Delete`,
 };
 
 const STORAGE_KEY = `liga-bank-2`;

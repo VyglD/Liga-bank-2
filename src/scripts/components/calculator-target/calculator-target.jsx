@@ -8,7 +8,7 @@ const CustomClass = {
   SELECT_BUTTON_WRAPPER_OPEN: `${SELECT_BUTTON_WRAPPER_CLASS}--open`,
 };
 
-const CalculatorStepOne = (props) => {
+const CalculatorTarget = (props) => {
   const {CreditType, onSelectItemClick} = props;
 
   const selectButtonWrapperRef = React.useRef();
@@ -37,7 +37,7 @@ const CalculatorStepOne = (props) => {
   );
 
   return (
-    <div className="calculator__step-1">
+    <div className="calculator__step calculator__step--target">
       <h3 className="calculator__step-title">Шаг 1. Цель кредита</h3>
       <div
         ref={selectButtonWrapperRef}
@@ -75,9 +75,9 @@ const CalculatorStepOne = (props) => {
   );
 };
 
-CalculatorStepOne.propTypes = {
+CalculatorTarget.propTypes = {
   CreditType: PropTypes.shape().isRequired,
   onSelectItemClick: PropTypes.func.isRequired,
 };
 
-export default CalculatorStepOne;
+export default CalculatorTarget;
