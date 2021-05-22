@@ -14,12 +14,15 @@ const Calculator = () => {
     <section className="calculator">
       <h2 className="calculator__title">Кредитный калькулятор</h2>
       <CalculatorTarget
+        className="calculator__step-1"
         CreditType={CreditType}
         onSelectItemClick={setCreditType}
       />
       {
         selectedCreditType === CreditType.MORTAGE && (
-          <CalculatorMortage />
+          <CalculatorMortage
+            className="calculator__step-2"
+          />
         )
       }
     </section>

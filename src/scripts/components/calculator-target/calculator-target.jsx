@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const SELECT_BUTTON_WRAPPER_CLASS = `calculator__select-button-wrapper`;
+const SELECT_BUTTON_WRAPPER_CLASS = `calculator-target__select-button-wrapper`;
 
 const CustomClass = {
   SELECT_BUTTON_WRAPPER: SELECT_BUTTON_WRAPPER_CLASS,
@@ -9,7 +9,7 @@ const CustomClass = {
 };
 
 const CalculatorTarget = (props) => {
-  const {CreditType, onSelectItemClick} = props;
+  const {className = ``, CreditType, onSelectItemClick} = props;
 
   const selectButtonWrapperRef = React.useRef();
   const selectButtonRef = React.useRef();
@@ -37,32 +37,32 @@ const CalculatorTarget = (props) => {
   );
 
   return (
-    <div className="calculator__step calculator__step--target">
-      <h3 className="calculator__step-title">Шаг 1. Цель кредита</h3>
+    <div className={`${className} calculator-target`}>
+      <h3 className="calculator-target__title">Шаг 1. Цель кредита</h3>
       <div
         ref={selectButtonWrapperRef}
         className={CustomClass.SELECT_BUTTON_WRAPPER}
       >
         <button
           ref={selectButtonRef}
-          className="calculator__select-button"
+          className="calculator-target__select-button"
           onClick={handleSelectButtonClick}
         >
           Выберите цель кредита
         </button>
-        <ul className="calculator__select-list">
-          <li className="calculator__select-item-wrapper">
+        <ul className="calculator-target__select-list">
+          <li className="calculator-target__select-item-wrapper">
             <button
-              className="calculator__select-item"
+              className="calculator-target__select-item"
               data-type={CreditType.MORTAGE}
               onClick={handleSelectItemClick}
             >
               {CreditType.MORTAGE}
             </button>
           </li>
-          <li className="calculator__select-item-wrapper">
+          <li className="calculator-target__select-item-wrapper">
             <button
-              className="calculator__select-item"
+              className="calculator-target__select-item"
               data-type={CreditType.AUTO}
               onClick={handleSelectItemClick}
             >
@@ -76,6 +76,7 @@ const CalculatorTarget = (props) => {
 };
 
 CalculatorTarget.propTypes = {
+  className: PropTypes.string,
   CreditType: PropTypes.shape().isRequired,
   onSelectItemClick: PropTypes.func.isRequired,
 };

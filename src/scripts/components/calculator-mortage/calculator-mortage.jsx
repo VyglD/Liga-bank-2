@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {Key} from "../../constants";
 
 const REGEX_DIGITS = /^\d+$/;
@@ -15,7 +16,9 @@ const createNewValue = (newValue) => {
   return `${newValue}${POSTFIX}`;
 };
 
-const CalculatorMortage = () => {
+const CalculatorMortage = (props) => {
+  const {className = ``} = props;
+
   const inputRef = React.useRef();
   const errorLabelRef = React.useRef();
 
@@ -105,30 +108,30 @@ const CalculatorMortage = () => {
   );
 
   return (
-    <div className="calculator__step calculator__step--mortage">
-      <h3 className="calculator__step-title">
+    <div className={`${className} calculator-mortage`}>
+      <h3 className="calculator-mortage__title">
         Шаг 2. Введите параметры кредита
       </h3>
-      <label className="calculator__step-label" htmlFor="estate-cost">
+      <label className="calculator-mortage__label" htmlFor="estate-cost">
         Стоимость недвижимости
       </label>
-      <div className="calculator__step-input-wrapper">
+      <div className="calculator-mortage__input-wrapper">
         <button
-          className="calculator__step-input-button calculator__step-input-button--left"
+          className="calculator-mortage__input-button calculator-mortage__input-button--minus"
           type="button"
           onClick={handleDecrease}
         >
-          -
+          Уменьшить стоимость
         </button>
         <p
           ref={errorLabelRef}
-          className="calculator__step-input-error calculator__step-input-error--display"
+          className="calculator-mortage__input-error calculator-mortage__input-error--display"
         >
           Некорректное значение
         </p>
         <input
           ref={inputRef}
-          className="calculator__step-input"
+          className="calculator-mortage__input"
           type="text"
           value={currentValue}
           min={Value.MIN}
@@ -140,20 +143,22 @@ const CalculatorMortage = () => {
           onBlur={handleBlur}
         />
         <button
-          className="calculator__step-input-button calculator__step-input-button--right"
+          className="calculator-mortage__input-button calculator-mortage__input-button--plus"
           onClick={handleIncrease}
           type="button"
         >
-          +
+          Увеличить стоимость
         </button>
       </div>
-      <p className="calculator__step-input-hint">
+      <p className="calculator-mortage__input-hint">
         От 1 200 000  до 25 000 000 рублей
       </p>
     </div>
   );
 };
 
-CalculatorMortage.propTypes = {};
+CalculatorMortage.propTypes = {
+  className: PropTypes.string,
+};
 
 export default CalculatorMortage;

@@ -1,0 +1,20 @@
+@mixin calculator-step-title() {
+  margin: 0;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+@mixin calculator-input() {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 19px 14px 17px;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+
+  border: 1px solid var(--color-black-0, black);
+  border-radius: 4px;
+}

@@ -1,0 +1,100 @@
+.calculator-mortage__title {
+  @include calculator-step-title;
+}
+
+.calculator-mortage__label {
+  display: block;
+
+  margin-top: 9px;
+
+  font-size: 16px;
+  line-height: 22px;
+
+  color: var(--color-black-4, black);
+}
+
+.calculator-mortage__input-wrapper {
+  position: relative;
+
+  overflow: hidden;
+
+  margin-top: 9px;
+}
+
+.calculator-mortage__input {
+  @include calculator-input;
+
+  padding-left: 65px;
+  padding-right: 65px;
+
+  text-align: center;
+}
+
+.calculator-mortage__input-button {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  display: block;
+
+  height: 100%;
+  padding: 0 24px;
+
+  font-size: 0;
+
+  background-color: transparent;
+
+  border: none;
+  outline: none;
+
+  &--minus,
+  &--plus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &::before,
+    &::after {
+      content: "";
+
+      display: block;
+      width: 16px;
+      height: 2px;
+
+      background-color: var(--color-black-0, black);
+    }
+  }
+
+  &--minus {
+    left: 0;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  &--plus {
+    right: 0;
+
+    padding-right: 15px;
+
+    &::after {
+      position: absolute;
+
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.calculator-mortage__input-error {
+  display: none;
+}
+
+.calculator-mortage__input-hint {
+  margin: 6px 0 0;
+
+  font-size: 14px;
+  line-height: 20px;
+
+  color: var(--color-black-3, black);
+}

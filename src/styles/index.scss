@@ -1,5 +1,6 @@
 @import "./config/fonts.scss";
 @import "./config/variables.scss";
+@import "./config/mixins.scss";
 @import "./config/animations.scss";
 @import "./config/common.scss";
 @import "./modules/prime.scss";
@@ -10,5 +11,7 @@
 @import "./modules/slider.scss";
 @import "./modules/services.scss";
 @import "./modules/calculator.scss";
+@import "./modules/calculator-target.scss";
+@import "./modules/calculator-mortage.scss";
 @import "./modules/departments.scss";
 @import "./modules/prime-footer.scss";
