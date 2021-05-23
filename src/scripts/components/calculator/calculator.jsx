@@ -1,6 +1,6 @@
 import React from "react";
 import CalculatorTarget from "../calculator-target/calculator-target";
-import CalculatorMortage from "../calculator-mortage/calculator-mortage";
+import CalculatorParams from "../calculator-params/calculator-params";
 
 const CreditType = {
   MORTAGE: `Ипотечное кредитование`,
@@ -20,7 +20,7 @@ const Calculator = () => {
       />
       {
         selectedCreditType === CreditType.MORTAGE && (
-          <CalculatorMortage
+          <CalculatorParams
             className="calculator__step-2"
           />
         )

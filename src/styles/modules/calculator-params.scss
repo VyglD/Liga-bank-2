@@ -1,8 +1,8 @@
-.calculator-mortage__title {
+.calculator-params__title {
   @include calculator-step-title;
 }
 
-.calculator-mortage__label {
+.calculator-params__label {
   display: block;
 
   margin-top: 9px;
@@ -13,7 +13,7 @@
   color: var(--color-black-4, black);
 }
 
-.calculator-mortage__input-wrapper {
+.calculator-params__input-wrapper {
   position: relative;
 
   overflow: visible;
@@ -21,11 +21,11 @@
   margin-top: 9px;
 
   &--invalid {
-    .calculator-mortage__input-error {
+    .calculator-params__input-error {
       display: block;
     }
 
-    .calculator-mortage__input {
+    .calculator-params__input {
       color: var(--color-red-0, red);
 
       border-color: var(--color-red-0, red);
@@ -34,7 +34,7 @@
   }
 }
 
-.calculator-mortage__input {
+.calculator-params__input {
   @include calculator-input;
 
   padding-left: 65px;
@@ -43,7 +43,7 @@
   text-align: center;
 }
 
-.calculator-mortage__input-button {
+.calculator-params__input-button {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -101,7 +101,7 @@
   }
 }
 
-.calculator-mortage__input-button:not(:disabled) {
+.calculator-params__input-button:not(:disabled) {
   &:hover,
   &:focus {
     box-shadow: inset 0 0 0 3px var(--color-gray-0, gray);
@@ -112,7 +112,7 @@
   }
 }
 
-.calculator-mortage__input-error {
+.calculator-params__input-error {
   position: absolute;
   top: -6px;
   left: 14px;
@@ -131,7 +131,7 @@
   background: var(--color-white-0, white);
 }
 
-.calculator-mortage__input-hint {
+.calculator-params__input-hint {
   margin: 6px 0 0;
 
   font-size: 14px;

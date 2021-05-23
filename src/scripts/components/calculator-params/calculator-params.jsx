@@ -7,7 +7,7 @@ const START_VALUE = 2_000_000;
 const VALUE_STEP = 100_000;
 const POSTFIX = ` рублей`;
 
-const WRAPPER_CLASS = `calculator-mortage__input-wrapper`;
+const WRAPPER_CLASS = `calculator-params__input-wrapper`;
 
 const CustomClass = {
   WRAPPER: WRAPPER_CLASS,
@@ -24,10 +24,16 @@ const getCleanDigit = (dirtyValue) => {
     return dirtyValue;
   }
 
-  return parseInt(
+  const cleanDigit = parseInt(
       String(dirtyValue).split(``).filter((char) => REGEX_DIGITS.test(char)).join(``),
       10
   );
+
+  if (isNaN(cleanDigit)) {
+    return 0;
+  }
+
+  return cleanDigit;
 };
 
 const getFormatedValue = (value) => {
@@ -46,7 +52,7 @@ const isValueInvalid = (value) => {
   return value < Value.MIN || value > Value.MAX;
 };
 
-const CalculatorMortage = (props) => {
+const CalculatorParams = (props) => {
   const {className = ``} = props;
 
   const inputWrapperRef = React.useRef();
@@ -144,11 +150,11 @@ const CalculatorMortage = (props) => {
   );
 
   return (
-    <div className={`${className} calculator-mortage`}>
-      <h3 className="calculator-mortage__title">
+    <div className={`${className} calculator-params`}>
+      <h3 className="calculator-params__title">
         Шаг 2. Введите параметры кредита
       </h3>
-      <label className="calculator-mortage__label" htmlFor="estate-cost">
+      <label className="calculator-params__label" htmlFor="estate-cost">
         Стоимость недвижимости
       </label>
       <div
@@ -156,16 +162,16 @@ const CalculatorMortage = (props) => {
         className={CustomClass.WRAPPER}
       >
         <button
-          className="calculator-mortage__input-button calculator-mortage__input-button--minus"
+          className="calculator-params__input-button calculator-params__input-button--minus"
           type="button"
           onClick={handleDecrease}
         >
           Уменьшить стоимость
         </button>
-        <p className="calculator-mortage__input-error">Некорректное значение</p>
+        <p className="calculator-params__input-error">Некорректное значение</p>
         <input
           ref={inputRef}
-          className="calculator-mortage__input"
+          className="calculator-params__input"
           type="text"
           value={currentValue}
           min={Value.MIN}
@@ -177,22 +183,22 @@ const CalculatorMortage = (props) => {
           onBlur={handleBlur}
         />
         <button
-          className="calculator-mortage__input-button calculator-mortage__input-button--plus"
+          className="calculator-params__input-button calculator-params__input-button--plus"
           onClick={handleIncrease}
           type="button"
         >
           Увеличить стоимость
         </button>
       </div>
-      <p className="calculator-mortage__input-hint">
+      <p className="calculator-params__input-hint">
         От 1 200 000  до 25 000 000 рублей
       </p>
     </div>
   );
 };
 
-CalculatorMortage.propTypes = {
+CalculatorParams.propTypes = {
   className: PropTypes.string,
 };
 
-export default CalculatorMortage;
+export default CalculatorParams;
