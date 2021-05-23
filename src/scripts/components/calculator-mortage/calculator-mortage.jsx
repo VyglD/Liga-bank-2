@@ -7,66 +7,110 @@ const START_VALUE = 2_000_000;
 const VALUE_STEP = 100_000;
 const POSTFIX = ` рублей`;
 
+const WRAPPER_CLASS = `calculator-mortage__input-wrapper`;
+
+const CustomClass = {
+  WRAPPER: WRAPPER_CLASS,
+  WRAPPER_INVALID: `${WRAPPER_CLASS}--invalid`,
+};
+
 const Value = {
   MIN: 1_200_000,
   MAX: 25_000_000,
 };
 
+const getCleanDigit = (dirtyValue) => {
+  if (typeof dirtyValue === `number`) {
+    return dirtyValue;
+  }
+
+  return parseInt(
+      String(dirtyValue).split(``).filter((char) => REGEX_DIGITS.test(char)).join(``),
+      10
+  );
+};
+
+const getFormatedValue = (value) => {
+  if (typeof value === `string`) {
+    value = getCleanDigit(value);
+  }
+
+  return value.toLocaleString();
+};
+
 const createNewValue = (newValue) => {
-  return `${newValue}${POSTFIX}`;
+  return `${getFormatedValue(newValue)}${POSTFIX}`;
+};
+
+const isValueInvalid = (value) => {
+  return value < Value.MIN || value > Value.MAX;
 };
 
 const CalculatorMortage = (props) => {
   const {className = ``} = props;
 
+  const inputWrapperRef = React.useRef();
   const inputRef = React.useRef();
-  const errorLabelRef = React.useRef();
 
   const [currentValue, setCurrentValue] = React.useState(createNewValue(START_VALUE));
+
+  const handleNewValue = React.useCallback(
+      (newValue) => {
+        const digitValue = getCleanDigit(newValue);
+
+        if (isValueInvalid(digitValue)) {
+          if (!inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
+            inputWrapperRef.current.classList.add(CustomClass.WRAPPER_INVALID);
+          }
+
+          if (digitValue < 0) {
+            return 0;
+          }
+        } else if (inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
+          inputWrapperRef.current.classList.remove(CustomClass.WRAPPER_INVALID);
+        }
+
+        return newValue;
+      },
+      []
+  );
 
   const handleIncrease = React.useCallback(
       () => {
         setCurrentValue((value) => {
+          value = getCleanDigit(value);
           const newValue = value + VALUE_STEP;
 
-          if (newValue > Value.MAX) {
-            // console.log(`invalid`);
-            return value;
-          }
-
-          return createNewValue(newValue);
+          return createNewValue(handleNewValue(newValue));
         });
       },
-      []
+      [handleNewValue]
   );
 
   const handleDecrease = React.useCallback(
       () => {
         setCurrentValue((value) => {
+          value = getCleanDigit(value);
           const newValue = value - VALUE_STEP;
 
-          if (newValue < Value.MIN) {
-            // console.log(`invalid`);
-            return value;
-          }
-
-          return createNewValue(newValue);
+          return createNewValue(handleNewValue(newValue));
         });
       },
-      []
+      [handleNewValue]
   );
 
   const handleInput = React.useCallback(
       (evt) => {
-        setCurrentValue(evt.target.value);
+        setCurrentValue(handleNewValue(evt.target.value));
       },
-      []
+      [handleNewValue]
   );
 
   const handleKeydown = React.useCallback(
       (evt) => {
         if (
           !(REGEX_DIGITS.test(evt.key)
+          || evt.key === Key.SPACE
           || evt.key === Key.BACKSPACE
           || evt.key === Key.DELETE
           || evt.key === Key.LEFT
@@ -84,11 +128,7 @@ const CalculatorMortage = (props) => {
   const handleFocus = React.useCallback(
       () => {
         setCurrentValue((value) => {
-          if (value.endsWith(POSTFIX)) {
-            return value.replace(POSTFIX, ``);
-          }
-
-          return value;
+          return getFormatedValue(value);
         });
       },
       []
@@ -97,11 +137,7 @@ const CalculatorMortage = (props) => {
   const handleBlur = React.useCallback(
       () => {
         setCurrentValue((value) => {
-          if (REGEX_DIGITS.test(value)) {
-            return createNewValue(value);
-          }
-
-          return value;
+          return createNewValue(value);
         });
       },
       []
@@ -115,7 +151,10 @@ const CalculatorMortage = (props) => {
       <label className="calculator-mortage__label" htmlFor="estate-cost">
         Стоимость недвижимости
       </label>
-      <div className="calculator-mortage__input-wrapper">
+      <div
+        ref={inputWrapperRef}
+        className={CustomClass.WRAPPER}
+      >
         <button
           className="calculator-mortage__input-button calculator-mortage__input-button--minus"
           type="button"
@@ -123,12 +162,7 @@ const CalculatorMortage = (props) => {
         >
           Уменьшить стоимость
         </button>
-        <p
-          ref={errorLabelRef}
-          className="calculator-mortage__input-error calculator-mortage__input-error--display"
-        >
-          Некорректное значение
-        </p>
+        <p className="calculator-mortage__input-error">Некорректное значение</p>
         <input
           ref={inputRef}
           className="calculator-mortage__input"
