@@ -1,8 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Key} from "../../constants";
-
-const REGEX_DIGITS = /^\d+$/;
+import {
+  getCleanDigit,
+  getFormatedDigitString,
+  createFormatedValueString
+} from "../../utils";
+import {Key, REGEX_DIGITS} from "../../constants";
 
 const WRAPPER_CLASS = `calculator-params__input-wrapper`;
 
@@ -13,31 +16,6 @@ const CustomClass = {
 
 const getDefaultStepValue = (min, max) => {
   return parseInt((max - min) / 10, 10);
-};
-
-const getCleanDigit = (dirtyValue) => {
-  if (typeof dirtyValue === `number`) {
-    return dirtyValue;
-  }
-
-  const cleanDigit = parseInt(
-      String(dirtyValue).split(``).filter((char) => REGEX_DIGITS.test(char)).join(``),
-      10
-  );
-
-  if (isNaN(cleanDigit)) {
-    return 0;
-  }
-
-  return cleanDigit;
-};
-
-const getFormatedValue = (value) => {
-  if (typeof value === `string`) {
-    value = getCleanDigit(value);
-  }
-
-  return value.toLocaleString();
 };
 
 const CalculatorInput = (props) => {
@@ -60,13 +38,6 @@ const CalculatorInput = (props) => {
 
   const inputWrapperRef = React.useRef();
   const inputRef = React.useRef();
-
-  const createNewValue = React.useCallback(
-      (newValue) => {
-        return `${getFormatedValue(newValue)}${postfix}`;
-      },
-      [postfix]
-  );
 
   const isValueInvalid = React.useCallback(
       (value) => {
@@ -102,10 +73,10 @@ const CalculatorInput = (props) => {
           value = getCleanDigit(value);
           const newValue = value + stepValue;
 
-          return createNewValue(handleNewValue(newValue));
+          return createFormatedValueString(handleNewValue(newValue), postfix);
         });
       },
-      [onCurrentValueChange, stepValue, handleNewValue, createNewValue]
+      [onCurrentValueChange, stepValue, handleNewValue, postfix]
   );
 
   const handleDecrease = React.useCallback(
@@ -114,10 +85,10 @@ const CalculatorInput = (props) => {
           value = getCleanDigit(value);
           const newValue = value - stepValue;
 
-          return createNewValue(handleNewValue(newValue));
+          return createFormatedValueString(handleNewValue(newValue), postfix);
         });
       },
-      [onCurrentValueChange, stepValue, handleNewValue, createNewValue]
+      [onCurrentValueChange, stepValue, handleNewValue, postfix]
   );
 
   const handleInput = React.useCallback(
@@ -148,7 +119,7 @@ const CalculatorInput = (props) => {
   const handleFocus = React.useCallback(
       () => {
         onCurrentValueChange((value) => {
-          return getFormatedValue(value);
+          return getFormatedDigitString(value);
         });
       },
       [onCurrentValueChange]
@@ -157,10 +128,10 @@ const CalculatorInput = (props) => {
   const handleBlur = React.useCallback(
       () => {
         onCurrentValueChange((value) => {
-          return createNewValue(value);
+          return createFormatedValueString(value, postfix);
         });
       },
-      [createNewValue, onCurrentValueChange]
+      [onCurrentValueChange, postfix]
   );
 
   return (
@@ -216,7 +187,7 @@ const CalculatorInput = (props) => {
       {
         hint && (
           <p className="calculator-params__input-hint">
-            От {getFormatedValue(minValue)} до {createNewValue(maxValue)}
+            От {getFormatedDigitString(minValue)} до {createFormatedValueString(maxValue, postfix)}
           </p>
         )
       }

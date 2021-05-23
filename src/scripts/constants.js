@@ -28,9 +28,12 @@ const Breakpoint = {
   TABLET: 768,
 };
 
+const REGEX_DIGITS = /^\d+$/;
+
 export {
   FOCUS_ELEMENTS,
   Key,
   STORAGE_KEY,
-  Breakpoint
+  Breakpoint,
+  REGEX_DIGITS,
 };

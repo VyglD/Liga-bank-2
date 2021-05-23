@@ -1,4 +1,4 @@
-import {FOCUS_ELEMENTS, Key} from "./constants";
+import {FOCUS_ELEMENTS, Key, REGEX_DIGITS} from "./constants";
 
 const getFocusableElements = (container) => {
   return Array.from(
@@ -46,6 +46,35 @@ const trimClasses = (classes) => {
   );
 };
 
+const getCleanDigit = (dirtyValue) => {
+  if (typeof dirtyValue === `number`) {
+    return dirtyValue;
+  }
+
+  const cleanDigit = parseInt(
+      String(dirtyValue).split(``).filter((char) => REGEX_DIGITS.test(char)).join(``),
+      10
+  );
+
+  if (isNaN(cleanDigit)) {
+    return 0;
+  }
+
+  return cleanDigit;
+};
+
+const getFormatedDigitString = (value) => {
+  if (typeof value === `string`) {
+    value = getCleanDigit(value);
+  }
+
+  return value.toLocaleString();
+};
+
+const createFormatedValueString = (value, postfix) => {
+  return `${getFormatedDigitString(value)}${postfix}`;
+};
+
 export {
   getFocusableElements,
   isEscKeyDown,
@@ -53,4 +82,7 @@ export {
   getPreviousArrayIndex,
   animate,
   trimClasses,
+  getCleanDigit,
+  getFormatedDigitString,
+  createFormatedValueString,
 };
