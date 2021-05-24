@@ -1,4 +1,8 @@
 .calculator {
+  position: relative;
+
+  overflow: hidden;
+
   padding: 53px var(--padding);
 }
 
@@ -15,5 +19,5 @@
 }
 
 .calculator__step-2 {
-  margin-top: 25px;
+  margin-top: 24px;
 }

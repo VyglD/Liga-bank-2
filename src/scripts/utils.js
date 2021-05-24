@@ -10,6 +10,14 @@ const isEscKeyDown = (evt) => {
   return evt.key === Key.ESC;
 };
 
+const isLeftKey = (evt) => {
+  return evt.code === Key.LEFT;
+};
+
+const isRightKey = (evt) => {
+  return evt.code === Key.RIGHT;
+};
+
 const getNextArrayIndex = (currentIndex, arr) => {
   return (currentIndex + 1) % arr.length;
 };
@@ -78,6 +86,8 @@ const createFormatedValueString = (value, postfix) => {
 export {
   getFocusableElements,
   isEscKeyDown,
+  isLeftKey,
+  isRightKey,
   getNextArrayIndex,
   getPreviousArrayIndex,
   animate,

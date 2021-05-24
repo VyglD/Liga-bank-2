@@ -16,8 +16,8 @@ const CostLimit = {
 };
 
 const PaymentLimit = {
-  MIN: 0.1,
-  MAX: 1,
+  MIN: 10,
+  MAX: 100,
 };
 
 // const DurationLimit = {
@@ -27,7 +27,7 @@ const PaymentLimit = {
 
 const Postfix = {
   COST: ` рублей`,
-  PAYMENT: ` %`,
+  PAYMENT: `%`,
   DURATION: ` лет`,
 };
 
@@ -47,7 +47,7 @@ const CalculatorParams = (props) => {
   );
 
   const calcMinPayment = React.useCallback(
-      (cost) => getCleanDigit(cost) * PaymentLimit.MIN,
+      (cost) => getCleanDigit(cost) * PaymentLimit.MIN / PaymentLimit.MAX,
       []
   );
 
@@ -56,7 +56,7 @@ const CalculatorParams = (props) => {
         // TODO: ИСПРАВИТЬ ПО ТЗ
         // console.log(`ё)ж
 
-        return getCleanDigit(cost) * PaymentLimit.MAX;
+        return getCleanDigit(cost) * PaymentLimit.MAX / PaymentLimit.MAX;
       },
       []
   );
@@ -70,6 +70,7 @@ const CalculatorParams = (props) => {
       }
   );
 
+  /* eslint-disable */
   const [currentPercent, setCurrentPercent] = React.useState(PaymentLimit.MIN);
 
   return (
@@ -100,9 +101,10 @@ const CalculatorParams = (props) => {
         onCurrentValueChange={setCurrentPayment}
         postfix={Postfix.COST}
         range={true}
-        minRangeValue={PaymentLimit.MIN}
-        maxRangeValue={PaymentLimit.MAX}
+        minRangeValue={createFormatedValueString(PaymentLimit.MIN, Postfix.PAYMENT)}
+        maxRangeValue={createFormatedValueString(PaymentLimit.MAX, Postfix.PAYMENT)}
         rangePostfix={Postfix.PAYMENT}
+        moving={true}
       />
     </div>
   );
