@@ -31,9 +31,8 @@ const CalculatorInput = (props) => {
     onCurrentValueChange,
     postfix,
     controls,
-    // range,
-    // movingRange,
-    hint
+    hint,
+    strict,
   } = props;
 
   const inputWrapperRef = React.useRef();
@@ -201,8 +200,7 @@ CalculatorInput.defaultProps = {
   inputClassName: `calculator-params__input`,
   postfix: ``,
   controls: false,
-  range: false,
-  movingRange: false,
+  strict: false,
   hint: false,
 };
 
@@ -218,8 +216,7 @@ CalculatorInput.propTypes = {
   onCurrentValueChange: PropTypes.func.isRequired,
   postfix: PropTypes.string,
   controls: PropTypes.bool,
-  range: PropTypes.bool,
-  movingRange: PropTypes.bool,
+  strict: PropTypes.bool,
   hint: PropTypes.bool,
 };
 

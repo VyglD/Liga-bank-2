@@ -1,7 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CalculatorInput from "../calculator-input/calculator-input";
-import {createFormatedValueString, isLeftKey, isRightKey} from "../../utils";
+import {
+  createFormatedValueString,
+  getCleanDigit,
+  isLeftKey,
+  isRightKey
+} from "../../utils";
 
 const RANGE_OFFSET = `--line-progress`;
 
@@ -19,18 +24,26 @@ const applyOffsetBorders = (offset) => {
 
 const CalculatorRange = (props) => {
   const {
+    maxValue,
+    onCurrentValueChange,
+    postfix,
     minRangeValue,
     maxRangeValue,
     initRangePosition,
     currentRangeValue,
     rangePostfix,
     moving,
+    onCurrentRangeValueChange,
   } = props;
 
   const rangeRef = React.useRef();
   const rangePointRef = React.useRef();
 
   const currentOffset = React.useRef(initRangePosition);
+  const fraction = React.useRef(
+      (getCleanDigit(maxRangeValue) - getCleanDigit(minRangeValue)) / 100
+  );
+  const initOffset = React.useRef(getCleanDigit(minRangeValue));
 
   const calculateOffset = React.useCallback(
       (x) => {
@@ -52,29 +65,56 @@ const CalculatorRange = (props) => {
         currentOffset.current = offset;
 
         rangeRef.current.style.setProperty(RANGE_OFFSET, `${offset}%`);
+
+        onCurrentRangeValueChange(Math.round(initOffset.current + fraction.current * offset));
       },
-      []
+      [onCurrentRangeValueChange]
+  );
+
+  const setNewRangeValue = React.useCallback(
+      (offset) => {
+        const percent = (initOffset.current + fraction.current * offset) / 100;
+        const newValue = Math.round(getCleanDigit(maxValue) * percent);
+
+        onCurrentValueChange(createFormatedValueString(newValue, postfix));
+
+        setOffset(offset);
+      },
+      [maxValue, postfix, onCurrentValueChange, setOffset]
+  );
+
+  const handleInputChange = React.useCallback(
+      (value) => {
+        if (typeof value === `string`) {
+          const percent = getCleanDigit(value) / getCleanDigit(maxValue) * 100;
+
+          setOffset(percent);
+        }
+
+        onCurrentValueChange(value);
+      },
+      [setOffset, maxValue, onCurrentValueChange]
   );
 
   const handleMouseMove = React.useCallback(
       (moveEvt) => {
         const offset = calculateOffset(moveEvt.clientX);
 
-        setOffset(offset);
+        setNewRangeValue(offset);
       },
-      [calculateOffset, setOffset]
+      [calculateOffset, setNewRangeValue]
   );
 
   const handleMouseUp = React.useCallback(
       (upEvt) => {
         const offset = calculateOffset(upEvt.clientX);
 
-        setOffset(offset);
+        setNewRangeValue(offset);
 
         document.removeEventListener(`mousemove`, handleMouseMove);
         document.removeEventListener(`mouseup`, handleMouseUp);
       },
-      [calculateOffset, setOffset, handleMouseMove]
+      [calculateOffset, setNewRangeValue, handleMouseMove]
   );
 
   const handleMouseDown = React.useCallback(
@@ -84,30 +124,30 @@ const CalculatorRange = (props) => {
 
         const offset = calculateOffset(downEvt.clientX);
 
-        setOffset(offset);
+        setNewRangeValue(offset);
       },
-      [handleMouseMove, handleMouseUp, calculateOffset, setOffset]
+      [handleMouseMove, handleMouseUp, calculateOffset, setNewRangeValue]
   );
 
   const handleTouchMove = React.useCallback(
       (moveEvt) => {
         const offset = calculateOffset(moveEvt.touches[0].pageX);
 
-        setOffset(offset);
+        setNewRangeValue(offset);
       },
-      [calculateOffset, setOffset]
+      [calculateOffset, setNewRangeValue]
   );
 
   const handleTouchEnd = React.useCallback(
       (endEvt) => {
         const offset = calculateOffset(endEvt.changedTouches[0].clientX);
 
-        setOffset(offset);
+        setNewRangeValue(offset);
 
         document.removeEventListener(`touchmove`, handleTouchMove);
         document.removeEventListener(`touchend`, handleTouchEnd);
       },
-      [calculateOffset, handleTouchMove, setOffset]
+      [calculateOffset, handleTouchMove, setNewRangeValue]
   );
 
   const handleTouchStart = React.useCallback(
@@ -117,9 +157,9 @@ const CalculatorRange = (props) => {
         document.addEventListener(`touchmove`, handleTouchMove);
         document.addEventListener(`touchend`, handleTouchEnd);
 
-        setOffset(offset);
+        setNewRangeValue(offset);
       },
-      [calculateOffset, handleTouchMove, handleTouchEnd, setOffset]
+      [calculateOffset, handleTouchMove, handleTouchEnd, setNewRangeValue]
   );
 
   const handleArrowDown = React.useCallback(
@@ -135,16 +175,17 @@ const CalculatorRange = (props) => {
 
           offset = applyOffsetBorders(offset);
 
-          setOffset(offset);
+          setNewRangeValue(offset);
         }
       },
-      [setOffset]
+      [setNewRangeValue]
   );
 
   return (
     <React.Fragment>
       <CalculatorInput
         {...props}
+        onCurrentValueChange={handleInputChange}
       />
       <div className="calculator-params__range">
         <div
@@ -191,17 +232,23 @@ const CalculatorRange = (props) => {
 
 CalculatorRange.defaultProps = {
   rangePostfix: ``,
+  postfix: ``,
   moving: false,
   initRangePosition: 0,
 };
 
 CalculatorRange.propTypes = {
+  maxValue: PropTypes.number.isRequired,
+  onCurrentValueChange: PropTypes.func.isRequired,
+  postfix: PropTypes.string,
   minRangeValue: PropTypes.string.isRequired,
   maxRangeValue: PropTypes.string.isRequired,
   initRangePosition: PropTypes.number,
   currentRangeValue: PropTypes.number.isRequired,
   rangePostfix: PropTypes.string,
   moving: PropTypes.bool,
+  onCurrentRangeValueChange: PropTypes.func.isRequired,
+
 };
 
 export default CalculatorRange;

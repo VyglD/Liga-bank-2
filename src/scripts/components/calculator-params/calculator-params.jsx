@@ -70,7 +70,6 @@ const CalculatorParams = (props) => {
       }
   );
 
-  /* eslint-disable */
   const [currentPercent, setCurrentPercent] = React.useState(PaymentLimit.MIN);
 
   return (
@@ -105,6 +104,7 @@ const CalculatorParams = (props) => {
         maxRangeValue={createFormatedValueString(PaymentLimit.MAX, Postfix.PAYMENT)}
         rangePostfix={Postfix.PAYMENT}
         moving={true}
+        onCurrentRangeValueChange={setCurrentPercent}
       />
     </div>
   );
