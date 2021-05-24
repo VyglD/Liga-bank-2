@@ -49,21 +49,27 @@ const CalculatorInput = (props) => {
       (newValue) => {
         const digitValue = getCleanDigit(newValue);
 
-        if (isValueInvalid(digitValue)) {
-          if (!inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
-            inputWrapperRef.current.classList.add(CustomClass.WRAPPER_INVALID);
+        if (strict) {
+          if (digitValue < minValue) {
+            return String(minValue);
           }
+        } else {
+          if (isValueInvalid(digitValue)) {
+            if (!inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
+              inputWrapperRef.current.classList.add(CustomClass.WRAPPER_INVALID);
+            }
 
-          if (digitValue < 0) {
-            return 0;
+            if (digitValue < 0) {
+              return 0;
+            }
+          } else if (inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
+            inputWrapperRef.current.classList.remove(CustomClass.WRAPPER_INVALID);
           }
-        } else if (inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
-          inputWrapperRef.current.classList.remove(CustomClass.WRAPPER_INVALID);
         }
 
         return newValue;
       },
-      [isValueInvalid]
+      [strict, minValue, isValueInvalid]
   );
 
   const handleIncrease = React.useCallback(

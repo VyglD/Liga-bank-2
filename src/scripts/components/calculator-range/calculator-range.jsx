@@ -34,6 +34,7 @@ const CalculatorRange = (props) => {
     rangePostfix,
     moving,
     onCurrentRangeValueChange,
+    stepRangeValue,
   } = props;
 
   const rangeRef = React.useRef();
@@ -43,6 +44,7 @@ const CalculatorRange = (props) => {
   const fraction = React.useRef(
       (getCleanDigit(maxRangeValue) - getCleanDigit(minRangeValue)) / 100
   );
+  const minRangeDigit = React.useRef(getCleanDigit(minRangeValue));
   const initOffset = React.useRef(getCleanDigit(minRangeValue));
 
   const calculateOffset = React.useCallback(
@@ -60,35 +62,39 @@ const CalculatorRange = (props) => {
 
   const setOffset = React.useCallback(
       (offset) => {
-        offset = applyOffsetBorders(offset);
+        const roundOffset = Math.round(applyOffsetBorders(offset) / stepRangeValue) * stepRangeValue;
+        currentOffset.current = roundOffset;
 
-        currentOffset.current = offset;
+        rangeRef.current.style.setProperty(RANGE_OFFSET, `${roundOffset}%`);
 
-        rangeRef.current.style.setProperty(RANGE_OFFSET, `${offset}%`);
+        const percent = Math.round(initOffset.current + fraction.current * roundOffset);
+        const roundPercent = Math.round(percent / stepRangeValue) * stepRangeValue;
 
-        onCurrentRangeValueChange(Math.round(initOffset.current + fraction.current * offset));
+        onCurrentRangeValueChange(roundPercent);
       },
-      [onCurrentRangeValueChange]
+      [stepRangeValue, onCurrentRangeValueChange]
   );
 
   const setNewRangeValue = React.useCallback(
       (offset) => {
         const percent = (initOffset.current + fraction.current * offset) / 100;
-        const newValue = Math.round(getCleanDigit(maxValue) * percent);
+        const roundPercent = Math.round(percent * 100 / stepRangeValue) * stepRangeValue / 100;
+        const newValue = Math.round(getCleanDigit(maxValue) * roundPercent);
 
         onCurrentValueChange(createFormatedValueString(newValue, postfix));
 
         setOffset(offset);
       },
-      [maxValue, postfix, onCurrentValueChange, setOffset]
+      [stepRangeValue, maxValue, postfix, onCurrentValueChange, setOffset]
   );
 
   const handleInputChange = React.useCallback(
       (value) => {
         if (typeof value === `string`) {
-          const percent = getCleanDigit(value) / getCleanDigit(maxValue) * 100;
+          const percent = (getCleanDigit(value) / getCleanDigit(maxValue) * 100);
+          const offset = (percent - minRangeDigit.current) / fraction.current;
 
-          setOffset(percent);
+          setOffset(offset);
         }
 
         onCurrentValueChange(value);
@@ -235,6 +241,7 @@ CalculatorRange.defaultProps = {
   postfix: ``,
   moving: false,
   initRangePosition: 0,
+  stepRangeValue: 1,
 };
 
 CalculatorRange.propTypes = {
@@ -248,7 +255,7 @@ CalculatorRange.propTypes = {
   rangePostfix: PropTypes.string,
   moving: PropTypes.bool,
   onCurrentRangeValueChange: PropTypes.func.isRequired,
-
+  stepRangeValue: PropTypes.number,
 };
 
 export default CalculatorRange;

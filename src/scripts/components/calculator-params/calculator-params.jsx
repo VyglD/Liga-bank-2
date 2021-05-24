@@ -94,17 +94,18 @@ const CalculatorParams = (props) => {
         inputId="input-payment"
         minValue={calcMinPayment(currentCost)}
         maxValue={calcMaxPayment(currentCost)}
-        stepValue={Step.PAYMENT}
+        stepValue={Step.COST}
         currentValue={currentPayment}
         currentRangeValue={currentPercent}
         onCurrentValueChange={setCurrentPayment}
         postfix={Postfix.COST}
-        range={true}
+        strict={true}
         minRangeValue={createFormatedValueString(PaymentLimit.MIN, Postfix.PAYMENT)}
         maxRangeValue={createFormatedValueString(PaymentLimit.MAX, Postfix.PAYMENT)}
         rangePostfix={Postfix.PAYMENT}
         moving={true}
         onCurrentRangeValueChange={setCurrentPercent}
+        stepRangeValue={Step.PAYMENT}
       />
     </div>
   );
