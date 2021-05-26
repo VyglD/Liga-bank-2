@@ -33,43 +33,39 @@ const CalculatorInput = (props) => {
     controls,
     hint,
     strict,
+    minStrict,
+    maxStrict,
   } = props;
 
   const inputWrapperRef = React.useRef();
   const inputRef = React.useRef();
 
-  const isValueInvalid = React.useCallback(
-      (value) => {
-        return value < minValue || value > maxValue;
-      },
-      [minValue, maxValue]
-  );
-
   const handleNewValue = React.useCallback(
       (newValue) => {
         const digitValue = getCleanDigit(newValue);
+        const isLess = digitValue < minValue;
+        const isBigger = digitValue > maxValue;
+        const isInaccurate = !(strict || minStrict || maxStrict);
 
-        if (strict) {
-          if (digitValue < minValue) {
-            return String(minValue);
+        if (isLess && (strict || minStrict)) {
+          return String(minValue);
+        } else if (isBigger && (strict || maxStrict)) {
+          return String(maxValue);
+        } else if (isInaccurate && (isLess || isBigger)) {
+          if (!inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
+            inputWrapperRef.current.classList.add(CustomClass.WRAPPER_INVALID);
           }
-        } else {
-          if (isValueInvalid(digitValue)) {
-            if (!inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
-              inputWrapperRef.current.classList.add(CustomClass.WRAPPER_INVALID);
-            }
 
-            if (digitValue < 0) {
-              return 0;
-            }
-          } else if (inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
-            inputWrapperRef.current.classList.remove(CustomClass.WRAPPER_INVALID);
+          if (digitValue < 0) {
+            return 0;
           }
+        } else if (inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
+          inputWrapperRef.current.classList.remove(CustomClass.WRAPPER_INVALID);
         }
 
         return newValue;
       },
-      [strict, minValue, isValueInvalid]
+      [strict, minStrict, maxStrict, minValue, maxValue]
   );
 
   const handleIncrease = React.useCallback(
@@ -124,6 +120,7 @@ const CalculatorInput = (props) => {
   const handleFocus = React.useCallback(
       () => {
         onCurrentValueChange((value) => {
+
           return getFormatedDigitString(value);
         });
       },
@@ -207,6 +204,8 @@ CalculatorInput.defaultProps = {
   postfix: ``,
   controls: false,
   strict: false,
+  minStrict: false,
+  maxStrict: false,
   hint: false,
 };
 
@@ -223,6 +222,8 @@ CalculatorInput.propTypes = {
   postfix: PropTypes.string,
   controls: PropTypes.bool,
   strict: PropTypes.bool,
+  minStrict: PropTypes.bool,
+  maxStrict: PropTypes.bool,
   hint: PropTypes.bool,
 };
 

@@ -20,10 +20,10 @@ const PaymentLimit = {
   MAX: 100,
 };
 
-// const DurationLimit = {
-//   MIN: 5,
-//   MAX: 30,
-// };
+const DurationLimit = {
+  MIN: 5,
+  MAX: 30,
+};
 
 const Postfix = {
   COST: ` рублей`,
@@ -72,6 +72,16 @@ const CalculatorParams = (props) => {
 
   const [currentPercent, setCurrentPercent] = React.useState(PaymentLimit.MIN);
 
+  const [currentDuration, setCurrentDuration] = React.useState(
+      () => {
+        return createFormatedValueString(DurationLimit.MIN, Postfix.DURATION);
+      }
+  );
+
+  // const [currentRangeDuration, setCurrentRangeDuration] = React.useState(DurationLimit.MIN);
+
+  // createFormatedValueString(currentRangeDuration, Postfix.DURATION)
+
   return (
     <div className={`${className} calculator-params`}>
       <h3 className="calculator-params__title">
@@ -96,16 +106,35 @@ const CalculatorParams = (props) => {
         maxValue={calcMaxPayment(currentCost)}
         stepValue={Step.COST}
         currentValue={currentPayment}
-        currentRangeValue={currentPercent}
         onCurrentValueChange={setCurrentPayment}
         postfix={Postfix.COST}
-        strict={true}
+        minStrict={true}
         minRangeValue={createFormatedValueString(PaymentLimit.MIN, Postfix.PAYMENT)}
         maxRangeValue={createFormatedValueString(PaymentLimit.MAX, Postfix.PAYMENT)}
+        currentRangeValue={currentPercent}
+        onCurrentRangeValueChange={setCurrentPercent}
         rangePostfix={Postfix.PAYMENT}
         moving={true}
-        onCurrentRangeValueChange={setCurrentPercent}
         stepRangeValue={Step.PAYMENT}
+      />
+      <CalculatorRange
+        labelText="Срок кредитования"
+        inputId="input-duration"
+        minValue={DurationLimit.MIN}
+        maxValue={DurationLimit.MAX}
+        stepValue={Step.DURATION}
+        currentValue={currentDuration}
+        onCurrentValueChange={setCurrentDuration}
+        postfix={Postfix.DURATION}
+        strict={true}
+        minRangeValue={createFormatedValueString(DurationLimit.MIN, Postfix.DURATION)}
+        maxRangeValue={createFormatedValueString(DurationLimit.MAX, Postfix.DURATION)}
+        // currentRangeValue={currentRangeDuration}
+        // onCurrentRangeValueChange={setCurrentRangeDuration}
+        currentRangeValue={0}
+        onCurrentRangeValueChange={() => {}}
+        rangePostfix={Postfix.DURATION}
+        stepRangeValue={Step.DURATION}
       />
     </div>
   );
