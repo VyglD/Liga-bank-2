@@ -47,11 +47,7 @@ const CalculatorInput = (props) => {
         const isBigger = digitValue > maxValue;
         const isInaccurate = !(strict || minStrict || maxStrict);
 
-        if (isLess && (strict || minStrict)) {
-          return String(minValue);
-        } else if (isBigger && (strict || maxStrict)) {
-          return String(maxValue);
-        } else if (isInaccurate && (isLess || isBigger)) {
+        if (isInaccurate && (isLess || isBigger)) {
           if (!inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
             inputWrapperRef.current.classList.add(CustomClass.WRAPPER_INVALID);
           }
@@ -130,10 +126,20 @@ const CalculatorInput = (props) => {
   const handleBlur = React.useCallback(
       () => {
         onCurrentValueChange((value) => {
-          return createFormatedValueString(value, postfix);
+          let newValue = getCleanDigit(value);
+          const isLess = newValue < minValue;
+          const isBigger = newValue > maxValue;
+
+          if (isLess && (strict || minStrict)) {
+            newValue = minValue;
+          } else if (isBigger && (strict || maxStrict)) {
+            newValue = maxValue;
+          }
+
+          return createFormatedValueString(newValue, postfix);
         });
       },
-      [onCurrentValueChange, postfix]
+      [strict, minStrict, maxStrict, minValue, maxValue, onCurrentValueChange, postfix]
   );
 
   return (

@@ -46,37 +46,32 @@ const CalculatorParams = (props) => {
       }
   );
 
-  const calcMinPayment = React.useCallback(
-      (cost) => getCleanDigit(cost) * PaymentLimit.MIN / PaymentLimit.MAX,
-      []
-  );
+  // const calcMinPayment = React.useCallback(
+  //     (cost) => getCleanDigit(cost) * PaymentLimit.MIN / PaymentLimit.MAX,
+  //     []
+  // );
 
-  const calcMaxPayment = React.useCallback(
-      (cost) => {
-        // TODO: ИСПРАВИТЬ ПО ТЗ
-        // console.log(`ё)ж
+  // const calcMaxPayment = React.useCallback(
+  //     (cost) => {
+  //       // TODO: ИСПРАВИТЬ ПО ТЗ
+  //       // console.log(`ё)ж
 
-        return getCleanDigit(cost) * PaymentLimit.MAX / PaymentLimit.MAX;
-      },
-      []
-  );
+  //       return getCleanDigit(cost) * PaymentLimit.MAX / PaymentLimit.MAX;
+  //     },
+  //     []
+  // );
 
-  const [currentPayment, setCurrentPayment] = React.useState(
-      () => {
-        return createFormatedValueString(
-            calcMinPayment(currentCost),
-            Postfix.COST
-        );
-      }
-  );
+  // const [currentPayment, setCurrentPayment] = React.useState(
+  //     createFormatedValueString(calcMinPayment(currentCost), Postfix.COST)
+  // );
 
-  const [currentPercent, setCurrentPercent] = React.useState(PaymentLimit.MIN);
+  // const [currentPercent, setCurrentPercent] = React.useState(PaymentLimit.MIN);
 
-  const [currentDuration, setCurrentDuration] = React.useState(
-      () => {
-        return createFormatedValueString(DurationLimit.MIN, Postfix.DURATION);
-      }
-  );
+  // const [currentDuration, setCurrentDuration] = React.useState(
+  //     () => {
+  //       return createFormatedValueString(DurationLimit.MIN, Postfix.DURATION);
+  //     }
+  // );
 
   // const [currentRangeDuration, setCurrentRangeDuration] = React.useState(DurationLimit.MIN);
 
@@ -99,7 +94,7 @@ const CalculatorParams = (props) => {
         controls={true}
         hint={true}
       />
-      <CalculatorRange
+      {/* <CalculatorRange
         labelText="Первоначальный взнос"
         inputId="input-payment"
         minValue={calcMinPayment(currentCost)}
@@ -116,8 +111,8 @@ const CalculatorParams = (props) => {
         rangePostfix={Postfix.PAYMENT}
         moving={true}
         stepRangeValue={Step.PAYMENT}
-      />
-      <CalculatorRange
+      /> */}
+      {/* <CalculatorRange
         labelText="Срок кредитования"
         inputId="input-duration"
         minValue={DurationLimit.MIN}
@@ -135,7 +130,7 @@ const CalculatorParams = (props) => {
         onCurrentRangeValueChange={() => {}}
         rangePostfix={Postfix.DURATION}
         stepRangeValue={Step.DURATION}
-      />
+      /> */}
     </div>
   );
 };
