@@ -71,7 +71,8 @@ const CalculatorParams = (props) => {
 
         setCurrentFormatedPaymentString(createFormatedValueString(newPayment, InputPostfix.COST));
       },
-      [minPayment, maxPayment, currentFormatedPaymentString]
+      /* eslint-disable-next-line react-hooks/exhaustive-deps */
+      [minPayment, maxPayment]
   );
 
   return (
