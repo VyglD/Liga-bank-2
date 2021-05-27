@@ -142,8 +142,6 @@ const CalculatorInput = (props) => {
       [strict, minStrict, maxStrict, minValue, maxValue, onCurrentValueChange, postfix]
   );
 
-  console.log(`currentValue`, currentValue);
-
   return (
     <React.Fragment>
       {

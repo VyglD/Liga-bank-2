@@ -27,15 +27,10 @@ const CalculatorRange = (props) => {
     stepRange,
     minValue,
     maxValue,
-    // currentValue,
     postfix,
     rangeValue,
     onCurrentRangeValueChange,
   } = props;
-
-  // const [rangeValue, setRangeValue] = React.useState(currentValue);
-
-  console.log(`rangeValue`, rangeValue);
 
   const rangeRef = React.useRef();
   const rangePointRef = React.useRef();
@@ -215,7 +210,6 @@ const CalculatorRange = (props) => {
 CalculatorRange.propTypes = {
   minValue: PropTypes.number.isRequired,
   maxValue: PropTypes.number.isRequired,
-  // currentValue: PropTypes.string.isRequired,
   postfix: PropTypes.string.isRequired,
   stepRange: PropTypes.number.isRequired,
   rangeValue: PropTypes.string.isRequired,
