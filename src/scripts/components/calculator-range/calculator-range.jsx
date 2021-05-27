@@ -30,6 +30,8 @@ const CalculatorRange = (props) => {
     postfix,
     rangeValue,
     onCurrentRangeValueChange,
+    formateRangeValue,
+    moving,
   } = props;
 
   const rangeRef = React.useRef();
@@ -192,20 +194,38 @@ const CalculatorRange = (props) => {
             onTouchStart={handleTouchStart}
             onKeyDown={handleArrowDown}
           />
+          {
+            moving && (
+              <p className="calculator-params__range-button-value">
+                {formateRangeValue(rangeValue, postfix)}
+              </p>
+            )
+          }
         </div>
-        <p
-          className="calculator-params__range-limit calculator-params__range-limit--min"
-        >
-          {minValue}
-        </p>
-        <p
-          className="calculator-params__range-limit calculator-params__range-limit--max"
-        >
-          {maxValue}
-        </p>
+        {
+          !moving && (
+            <React.Fragment>
+              <p
+                className="calculator-params__range-limit calculator-params__range-limit--min"
+              >
+                {formateRangeValue(minValue, postfix)}
+              </p>
+              <p
+                className="calculator-params__range-limit calculator-params__range-limit--max"
+              >
+                {formateRangeValue(maxValue, postfix)}
+              </p>
+            </React.Fragment>
+          )
+        }
       </div>
     </React.Fragment>
   );
+};
+
+CalculatorRange.defaultProps = {
+  formateRangeValue: (view, postfix) => createFormatedValueString(view, postfix),
+  moving: false,
 };
 
 CalculatorRange.propTypes = {
@@ -215,6 +235,8 @@ CalculatorRange.propTypes = {
   stepRange: PropTypes.number.isRequired,
   rangeValue: PropTypes.string.isRequired,
   onCurrentRangeValueChange: PropTypes.func.isRequired,
+  formateRangeValue: PropTypes.func,
+  moving: PropTypes.bool,
 };
 
 export default CalculatorRange;

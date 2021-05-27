@@ -75,6 +75,15 @@ const CalculatorParams = (props) => {
       [minPayment, maxPayment]
   );
 
+  const formateRangePayment = React.useCallback(
+      (value) => {
+        const newValue = Math.round(getCleanDigit(value) / maxPayment * 100);
+
+        return createFormatedValueString(newValue, InputPostfix.PAYMENT);
+      },
+      [maxPayment]
+  );
+
   return (
     <div className={`${className} calculator-params`}>
       <h3 className="calculator-params__title">
@@ -103,6 +112,8 @@ const CalculatorParams = (props) => {
         stepRange={Step.PAYMENT}
         rangeValue={currentFormatedPaymentString}
         onCurrentRangeValueChange={setCurrentFormatedPaymentString}
+        formateRangeValue={formateRangePayment}
+        moving={true}
       />
       <CalculatorRange
         labelText="Срок кредитования"
