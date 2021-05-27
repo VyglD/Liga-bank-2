@@ -61,9 +61,10 @@ const CalculatorParams = (props) => {
 
   React.useEffect(
       () => {
-        setCurrentFormatedPaymentString(createFormatedValueString(minPayment, InputPostfix.COST));
+        const oldFormatedPaymentString = getCleanDigit(currentFormatedPaymentString);
+        setCurrentFormatedPaymentString(createFormatedValueString(oldFormatedPaymentString, InputPostfix.COST));
       },
-      [minPayment]
+      [currentFormatedPaymentString]
   );
 
   return (

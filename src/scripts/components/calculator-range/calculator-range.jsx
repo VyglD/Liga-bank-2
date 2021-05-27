@@ -35,7 +35,18 @@ const CalculatorRange = (props) => {
   const rangeRef = React.useRef();
   const rangePointRef = React.useRef();
 
-  const fraction = React.useRef(100 / (maxValue - minValue) * stepRange);
+  const diff = React.useRef(maxValue - minValue);
+  const exceedRange = React.useRef(diff.current > 100);
+
+  // const fraction = React.useRef(
+  //     exceedRange.current
+  //       ? diff.current / 100 * stepRange
+  //       : 100 / diff.current * stepRange
+  // );
+
+  const fraction = 100 / (maxValue - minValue);
+
+  // console.log(fraction);
 
   const setOffset = React.useCallback(
       (offset) => {
@@ -49,7 +60,7 @@ const CalculatorRange = (props) => {
       (value) => {
         const digitValue = getCleanDigit(value);
 
-        return applyOffsetBorders((digitValue - minValue) * fraction.current);
+        return applyOffsetBorders((digitValue - minValue) * fraction);
       },
       [minValue]
   );
@@ -71,13 +82,20 @@ const CalculatorRange = (props) => {
 
   const setNewRangeValue = React.useCallback(
       (offset) => {
-        const newValue = Math.round(offset / fraction.current) + minValue;
-        const roundOffset = Math.round(offset / fraction.current) * fraction.current;
+        // const newValue = exceedRange.current
+        //   ? Math.round(offset * fraction) + minValue
+        //   : Math.round(offset / fraction) + minValue;
+
+        const roundRatio = Math.max(stepRange, fraction);
+        const roundOffset = Math.round(offset / roundRatio) * roundRatio;
+        const newValue = Math.round(roundOffset / fraction) + minValue;
+
+        console.log(offset, fraction, newValue, roundOffset, minValue);
 
         onCurrentRangeValueChange(createFormatedValueString(newValue, postfix));
         setOffset(roundOffset);
       },
-      [minValue, onCurrentRangeValueChange, postfix, setOffset]
+      [minValue, onCurrentRangeValueChange, postfix, setOffset, stepRange]
   );
 
   const handleMouseMove = React.useCallback(
@@ -152,9 +170,9 @@ const CalculatorRange = (props) => {
           let offset = currentOffset.current;
 
           if (isLeftKey(downEvt)) {
-            offset = offset - fraction.current;
+            offset = offset - fraction;
           } else if (isRightKey(downEvt)) {
-            offset = offset + fraction.current;
+            offset = offset + fraction;
           }
 
           setNewRangeValue(applyOffsetBorders(offset));
