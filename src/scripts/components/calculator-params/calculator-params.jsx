@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CalculatorInput from "../calculator-input/calculator-input";
+import CalculatorRangeDuration from "../calculator-range-duration/calculator-range-duration";
 import CalculatorRange from "../calculator-range/calculator-range";
 import {
-  getFormatedDigitString,
-  getCleanDigit,
-  createFormatedValueString,
+  // getFormatedDigitString,
+  // getCleanDigit,
+  createFormatedValueString, getCleanDigit,
 } from "../../utils";
+import {InputPostfix} from "../../constants";
 
 const INIT_COST_VALUE = 2_000_000;
 
@@ -15,36 +17,44 @@ const CostLimit = {
   MAX: 25_000_000,
 };
 
-const PaymentLimit = {
-  MIN: 10,
-  MAX: 100,
-};
+const DURATION_STEP = 1;
 
 const DurationLimit = {
   MIN: 5,
   MAX: 30,
 };
 
-const Postfix = {
-  COST: ` рублей`,
-  PAYMENT: `%`,
-  DURATION: ` лет`,
-};
+// const PaymentLimit = {
+//   MIN: 10,
+//   MAX: 100,
+// };
 
-const Step = {
-  COST: 100_000,
-  PAYMENT: 5,
-  DURATION: 1,
-};
+// const DurationLimit = {
+//   MIN: 5,
+//   MAX: 30,
+// };
+
+// const InputPostfix = {
+//   COST: ` рублей`,
+//   PAYMENT: `%`,
+//   DURATION: ` лет`,
+// };
+
+const COST_STEP = 100_000;
+
+// const Step = {
+//   COST: 100_000,
+//   PAYMENT: 5,
+//   DURATION: 1,
+// };
 
 const CalculatorParams = (props) => {
   const {className = ``} = props;
 
-  const [currentCost, setCurrentCost] = React.useState(
-      () => {
-        return `${getFormatedDigitString(INIT_COST_VALUE)}${Postfix.COST}`;
-      }
-  );
+  const [
+    currentFormatedCostString,
+    setCurrentFormatedCostString
+  ] = React.useState(createFormatedValueString(INIT_COST_VALUE, InputPostfix.COST));
 
   // const calcMinPayment = React.useCallback(
   //     (cost) => getCleanDigit(cost) * PaymentLimit.MIN / PaymentLimit.MAX,
@@ -77,6 +87,30 @@ const CalculatorParams = (props) => {
 
   // createFormatedValueString(currentRangeDuration, Postfix.DURATION)
 
+  const minPayment = 0.1 * getCleanDigit(currentFormatedCostString);
+  const maxPayment = 1 * getCleanDigit(currentFormatedCostString);
+  const paymentStep = 5;
+
+  const [
+    currentFormatedPaymentString,
+    setCurrentFormatedPaymentString
+  ] = React.useState(createFormatedValueString(minPayment, InputPostfix.COST));
+
+  React.useEffect(
+      () => {
+        setCurrentFormatedPaymentString(createFormatedValueString(minPayment, InputPostfix.COST));
+        console.log(`change`);
+      },
+      [minPayment]
+  );
+
+  console.log(minPayment, currentFormatedPaymentString);
+
+  const [
+    currentFormatedDurationString,
+    setCurrentFormatedDurationString
+  ] = React.useState(createFormatedValueString(10, InputPostfix.DURATION));
+
   return (
     <div className={`${className} calculator-params`}>
       <h3 className="calculator-params__title">
@@ -87,13 +121,42 @@ const CalculatorParams = (props) => {
         inputId="input-cost"
         minValue={CostLimit.MIN}
         maxValue={CostLimit.MAX}
-        stepValue={Step.COST}
-        currentValue={currentCost}
-        onCurrentValueChange={setCurrentCost}
-        postfix={Postfix.COST}
+        stepValue={COST_STEP}
+        currentValue={currentFormatedCostString}
+        onCurrentValueChange={setCurrentFormatedCostString}
+        postfix={InputPostfix.COST}
         controls={true}
         hint={true}
       />
+      <CalculatorRange
+        labelText="Первоначальный взнос"
+        inputId="input-payment"
+        minValue={minPayment}
+        maxValue={maxPayment}
+        stepValue={COST_STEP}
+        // currentValue={currentFormatedPaymentString}
+        // onCurrentValueChange={setCurrentFormatedPaymentString}
+        postfix={InputPostfix.COST}
+        minStrict={true}
+        stepRange={paymentStep}
+        rangeValue={currentFormatedPaymentString}
+        onCurrentRangeValueChange={setCurrentFormatedPaymentString}
+      />
+      <CalculatorRange
+        labelText="Срок кредитования"
+        inputId="input-duration"
+        minValue={DurationLimit.MIN}
+        maxValue={DurationLimit.MAX}
+        stepValue={DURATION_STEP}
+        // currentValue={currentFormatedDurationString}
+        // onCurrentValueChange={setCurrentFormatedDurationString}
+        postfix={InputPostfix.DURATION}
+        strict={true}
+        stepRange={1}
+        rangeValue={currentFormatedDurationString}
+        onCurrentRangeValueChange={setCurrentFormatedDurationString}
+      />
+      {/* <CalculatorRangeDuration /> */}
       {/* <CalculatorRange
         labelText="Первоначальный взнос"
         inputId="input-payment"

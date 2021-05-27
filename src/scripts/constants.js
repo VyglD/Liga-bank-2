@@ -30,10 +30,17 @@ const Breakpoint = {
 
 const REGEX_DIGITS = /^\d+$/;
 
+const InputPostfix = {
+  COST: ` рублей`,
+  PAYMENT: `%`,
+  DURATION: ` лет`,
+};
+
 export {
   FOCUS_ELEMENTS,
   Key,
   STORAGE_KEY,
   Breakpoint,
   REGEX_DIGITS,
+  InputPostfix,
 };

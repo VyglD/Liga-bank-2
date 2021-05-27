@@ -5,7 +5,7 @@ import {
   createFormatedValueString,
   getCleanDigit,
   isLeftKey,
-  isRightKey,
+  isRightKey
 } from "../../utils";
 
 const RANGE_OFFSET = `--line-progress`;
@@ -22,44 +22,30 @@ const applyOffsetBorders = (offset) => {
   return offset;
 };
 
-const CalculatorRange = (props) => {
+const CalculatorRangeOld = (props) => {
   const {
-    stepRange,
-    minValue,
     maxValue,
-    // currentValue,
+    onCurrentValueChange,
     postfix,
-    rangeValue,
+    minRangeValue,
+    maxRangeValue,
+    initRangePosition,
+    currentRangeValue,
+    rangePostfix,
+    moving,
     onCurrentRangeValueChange,
+    stepRangeValue,
   } = props;
-
-  // const [rangeValue, setRangeValue] = React.useState(currentValue);
-
-  console.log(`rangeValue`, rangeValue);
 
   const rangeRef = React.useRef();
   const rangePointRef = React.useRef();
 
-  const fraction = React.useRef(100 / (maxValue - minValue) * stepRange);
-
-  const setOffset = React.useCallback(
-      (offset) => {
-        currentOffset.current = offset;
-        rangeRef.current.style.setProperty(RANGE_OFFSET, `${offset}%`);
-      },
-      []
+  const currentOffset = React.useRef(initRangePosition);
+  const fraction = React.useRef(
+      (getCleanDigit(maxRangeValue) - getCleanDigit(minRangeValue)) / 100
   );
-
-  const convertValueToOffset = React.useCallback(
-      (value) => {
-        const digitValue = getCleanDigit(value);
-
-        return applyOffsetBorders((digitValue - minValue) * fraction.current);
-      },
-      [minValue]
-  );
-
-  const currentOffset = React.useRef(convertValueToOffset(rangeValue));
+  const minRangeDigit = React.useRef(getCleanDigit(minRangeValue));
+  const initOffset = React.useRef(getCleanDigit(minRangeValue));
 
   const calculateOffset = React.useCallback(
       (x) => {
@@ -74,15 +60,46 @@ const CalculatorRange = (props) => {
       []
   );
 
+  const setOffset = React.useCallback(
+      (offset) => {
+        const roundOffset = Math.round(applyOffsetBorders(offset) / stepRangeValue) * stepRangeValue;
+        currentOffset.current = roundOffset;
+
+        rangeRef.current.style.setProperty(RANGE_OFFSET, `${roundOffset}%`);
+
+        const percent = Math.round(initOffset.current + fraction.current * roundOffset);
+        const roundPercent = Math.round(percent / stepRangeValue) * stepRangeValue;
+
+        onCurrentRangeValueChange(roundPercent);
+      },
+      [stepRangeValue, onCurrentRangeValueChange]
+  );
+
   const setNewRangeValue = React.useCallback(
       (offset) => {
-        const newValue = Math.round(offset / fraction.current) + minValue;
-        const roundOffset = Math.round(offset / fraction.current) * fraction.current;
+        const percent = (initOffset.current + fraction.current * offset) / 100;
+        const roundPercent = Math.round(percent * 100 / stepRangeValue) * stepRangeValue / 100;
+        const newValue = Math.round(getCleanDigit(maxValue) * roundPercent);
 
-        onCurrentRangeValueChange(createFormatedValueString(newValue, postfix));
-        setOffset(roundOffset);
+        onCurrentValueChange(createFormatedValueString(newValue, postfix));
+
+        setOffset(offset);
       },
-      [minValue, onCurrentRangeValueChange, postfix, setOffset]
+      [stepRangeValue, maxValue, postfix, onCurrentValueChange, setOffset]
+  );
+
+  const handleInputChange = React.useCallback(
+      (value) => {
+        if (typeof value === `string`) {
+          const percent = (getCleanDigit(value) / getCleanDigit(maxValue) * 100);
+          const offset = (percent - minRangeDigit.current) / fraction.current;
+
+          setOffset(offset);
+        }
+
+        onCurrentValueChange(value);
+      },
+      [setOffset, maxValue, onCurrentValueChange]
   );
 
   const handleMouseMove = React.useCallback(
@@ -157,30 +174,24 @@ const CalculatorRange = (props) => {
           let offset = currentOffset.current;
 
           if (isLeftKey(downEvt)) {
-            offset = offset - fraction.current;
+            offset = --offset;
           } else if (isRightKey(downEvt)) {
-            offset = offset + fraction.current;
+            offset = ++offset;
           }
 
-          setNewRangeValue(applyOffsetBorders(offset));
+          offset = applyOffsetBorders(offset);
+
+          setNewRangeValue(offset);
         }
       },
       [setNewRangeValue]
-  );
-
-  React.useEffect(
-      () => {
-        setOffset(convertValueToOffset(rangeValue));
-      },
-      [setOffset, convertValueToOffset, rangeValue]
   );
 
   return (
     <React.Fragment>
       <CalculatorInput
         {...props}
-        onCurrentValueChange={onCurrentRangeValueChange}
-        currentValue={rangeValue}
+        onCurrentValueChange={handleInputChange}
       />
       <div className="calculator-params__range">
         <div
@@ -196,30 +207,55 @@ const CalculatorRange = (props) => {
             onTouchStart={handleTouchStart}
             onKeyDown={handleArrowDown}
           />
+          {
+            moving && (
+              <p className="calculator-params__range-button-value">
+                {createFormatedValueString(currentRangeValue, rangePostfix)}
+              </p>
+            )
+          }
         </div>
-        <p
-          className="calculator-params__range-limit calculator-params__range-limit--min"
-        >
-          {minValue}
-        </p>
-        <p
-          className="calculator-params__range-limit calculator-params__range-limit--max"
-        >
-          {maxValue}
-        </p>
+        {
+          !moving && (
+            <React.Fragment>
+              <p
+                className="calculator-params__range-limit calculator-params__range-limit--min"
+              >
+                {minRangeValue}
+              </p>
+              <p
+                className="calculator-params__range-limit calculator-params__range-limit--max"
+              >
+                {maxRangeValue}
+              </p>
+            </React.Fragment>
+          )
+        }
       </div>
     </React.Fragment>
   );
 };
 
-CalculatorRange.propTypes = {
-  minValue: PropTypes.number.isRequired,
-  maxValue: PropTypes.number.isRequired,
-  // currentValue: PropTypes.string.isRequired,
-  postfix: PropTypes.string.isRequired,
-  stepRange: PropTypes.number.isRequired,
-  rangeValue: PropTypes.string.isRequired,
-  onCurrentRangeValueChange: PropTypes.func.isRequired,
+CalculatorRangeOld.defaultProps = {
+  rangePostfix: ``,
+  postfix: ``,
+  moving: false,
+  initRangePosition: 0,
+  stepRangeValue: 1,
 };
 
-export default CalculatorRange;
+CalculatorRangeOld.propTypes = {
+  maxValue: PropTypes.number.isRequired,
+  onCurrentValueChange: PropTypes.func.isRequired,
+  postfix: PropTypes.string,
+  minRangeValue: PropTypes.string.isRequired,
+  maxRangeValue: PropTypes.string.isRequired,
+  initRangePosition: PropTypes.number,
+  currentRangeValue: PropTypes.number.isRequired,
+  rangePostfix: PropTypes.string,
+  moving: PropTypes.bool,
+  onCurrentRangeValueChange: PropTypes.func.isRequired,
+  stepRangeValue: PropTypes.number,
+};
+
+export default CalculatorRangeOld;
