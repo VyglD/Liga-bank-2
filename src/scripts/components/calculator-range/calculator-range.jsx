@@ -35,18 +35,7 @@ const CalculatorRange = (props) => {
   const rangeRef = React.useRef();
   const rangePointRef = React.useRef();
 
-  const diff = React.useRef(maxValue - minValue);
-  const exceedRange = React.useRef(diff.current > 100);
-
-  // const fraction = React.useRef(
-  //     exceedRange.current
-  //       ? diff.current / 100 * stepRange
-  //       : 100 / diff.current * stepRange
-  // );
-
   const fraction = 100 / (maxValue - minValue);
-
-  // console.log(fraction);
 
   const setOffset = React.useCallback(
       (offset) => {
@@ -62,7 +51,7 @@ const CalculatorRange = (props) => {
 
         return applyOffsetBorders((digitValue - minValue) * fraction);
       },
-      [minValue]
+      [minValue, fraction]
   );
 
   const currentOffset = React.useRef(convertValueToOffset(rangeValue));
@@ -82,20 +71,14 @@ const CalculatorRange = (props) => {
 
   const setNewRangeValue = React.useCallback(
       (offset) => {
-        // const newValue = exceedRange.current
-        //   ? Math.round(offset * fraction) + minValue
-        //   : Math.round(offset / fraction) + minValue;
-
         const roundRatio = Math.max(stepRange, fraction);
         const roundOffset = Math.round(offset / roundRatio) * roundRatio;
         const newValue = Math.round(roundOffset / fraction) + minValue;
 
-        console.log(offset, fraction, newValue, roundOffset, minValue);
-
         onCurrentRangeValueChange(createFormatedValueString(newValue, postfix));
         setOffset(roundOffset);
       },
-      [minValue, onCurrentRangeValueChange, postfix, setOffset, stepRange]
+      [minValue, fraction, onCurrentRangeValueChange, postfix, setOffset, stepRange]
   );
 
   const handleMouseMove = React.useCallback(
@@ -178,7 +161,7 @@ const CalculatorRange = (props) => {
           setNewRangeValue(applyOffsetBorders(offset));
         }
       },
-      [setNewRangeValue]
+      [setNewRangeValue, fraction]
   );
 
   React.useEffect(

@@ -47,7 +47,6 @@ const CalculatorParams = (props) => {
 
   const minPayment = 0.1 * getCleanDigit(currentFormatedCostString);
   const maxPayment = 1 * getCleanDigit(currentFormatedCostString);
-  const paymentStep = 5;
 
   const [
     currentFormatedPaymentString,
@@ -61,10 +60,18 @@ const CalculatorParams = (props) => {
 
   React.useEffect(
       () => {
-        const oldFormatedPaymentString = getCleanDigit(currentFormatedPaymentString);
-        setCurrentFormatedPaymentString(createFormatedValueString(oldFormatedPaymentString, InputPostfix.COST));
+        const oldPayment = getCleanDigit(currentFormatedPaymentString);
+        let newPayment = oldPayment;
+
+        if (oldPayment < minPayment) {
+          newPayment = minPayment;
+        } else if (oldPayment > maxPayment) {
+          newPayment = maxPayment;
+        }
+
+        setCurrentFormatedPaymentString(createFormatedValueString(newPayment, InputPostfix.COST));
       },
-      [currentFormatedPaymentString]
+      [minPayment, maxPayment, currentFormatedPaymentString]
   );
 
   return (
@@ -92,7 +99,7 @@ const CalculatorParams = (props) => {
         stepValue={Step.COST}
         postfix={InputPostfix.COST}
         minStrict={true}
-        stepRange={paymentStep}
+        stepRange={Step.PAYMENT}
         rangeValue={currentFormatedPaymentString}
         onCurrentRangeValueChange={setCurrentFormatedPaymentString}
       />
