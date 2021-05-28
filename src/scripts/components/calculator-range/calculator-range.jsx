@@ -35,7 +35,6 @@ const CalculatorRange = (props) => {
   } = props;
 
   const rangeRef = React.useRef();
-  const rangePointRef = React.useRef();
 
   const fraction = 100 / (maxValue - minValue);
 
@@ -180,13 +179,12 @@ const CalculatorRange = (props) => {
         onCurrentValueChange={onCurrentRangeValueChange}
         currentValue={rangeValue}
       />
-      <div className="calculator-params__range">
-        <div
-          ref={rangeRef}
-          className="calculator-params__range-button-wrapper"
-        >
+      <div
+        ref={rangeRef}
+        className="calculator-params__range"
+      >
+        <div className="calculator-params__range-line">
           <button
-            ref={rangePointRef}
             className="calculator-params__range-button"
             type="button"
             aria-label="Изменить значение"

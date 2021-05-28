@@ -141,45 +141,59 @@
 }
 
 .calculator-params__range {
+  --line-progress: 0;
+
   display: flex;
   flex-wrap: wrap;
+
+  padding-bottom: 21px;
+  margin-top: 11px;
 }
 
-.calculator-params__range-button-wrapper {
-  --line-progress: 0;
-  --point-size: 14px;
-  --point-offset: calc(-1 * var(--point-size) / 2);
-
+.calculator-params__range-line {
   position: relative;
+  display: flex;
 
-  width: calc(100% - var(--point-size));
-  margin: 20px auto 0;
+  width: 100%;
+  height: 1px;
+  padding: 10px 0;
 
-  &::before {
+  &::before,
+  &::after {
     content: "";
+
+    position: relative;
+    z-index: 1;
 
     display: block;
 
-    width: 100%;
-    height: 1px;
+    height: 100%;
+  }
 
-    background:
-      linear-gradient(
-        90deg,
-        var(--color-blue-0, blue) var(--line-progress),
-        var(--color-gray-2, gray) var(--line-progress)
-      );
+  &::before {
+    width: var(--line-progress);
+
+    background-color: var(--color-blue-0, blue);
+  }
+
+  &::after {
+    width: calc(100% - var(--line-progress));
+
+    background-color: var(--color-gray-2, gray);
   }
 }
 
 .calculator-params__range-button {
+  --point-size: 14px;
+
   position: relative;
-  left: var(--line-progress);
+  z-index: 2;
 
   display: block;
 
+  width: var(--point-size);
+  height: var(--point-size);
   padding: 0;
-  margin-left: var(--point-offset);
 
   background-color: transparent;
 
@@ -203,16 +217,18 @@
   }
 
   &::after {
+    --click-area-size: 30px;
+
     content: "";
 
     position: absolute;
-    top: -7px;
-    left: -7px;
+    top: calc(var(--point-size) / 2 * -1);
+    left: calc(var(--point-size) / 2 * -1);
 
     display: block;
 
-    width: 30px;
-    height: 30px;
+    width: var(--click-area-size);
+    height: var(--click-area-size);
   }
 }
 
@@ -238,13 +254,14 @@
 }
 
 .calculator-params__range-button-value {
-  position: relative;
+  position: absolute;
   left: var(--line-progress);
 
   display: block;
 
-  margin-top: -2px;
-  margin-left: var(--point-offset);
+  margin-top: 12px;
+
+  transform: translateX(calc(-1 * var(--line-progress)));
 }
 
 .calculator-params__range-limit {
