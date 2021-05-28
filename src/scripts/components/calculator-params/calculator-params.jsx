@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import CalculatorInput from "../calculator-input/calculator-input";
 import CalculatorRange from "../calculator-range/calculator-range";
-import {
-  // getFormatedDigitString,
-  // getCleanDigit,
-  createFormatedValueString, getCleanDigit,
-} from "../../utils";
+import CalculatorOffer from "../calculator-offer/calculator-offer";
+import {createFormatedValueString, getCleanDigit} from "../../utils";
+import {Postfix} from "../../constants";
 
 const INIT_COST_VALUE = 2_000_000;
+
+const MOTHER_CAPITAL = 470_000;
 
 const CostLimit = {
   MIN: 1_200_000,
@@ -20,17 +20,6 @@ const DurationLimit = {
   MAX: 30,
 };
 
-// const PaymentLimit = {
-//   MIN: 10,
-//   MAX: 100,
-// };
-
-const InputPostfix = {
-  COST: ` рублей`,
-  PAYMENT: `%`,
-  DURATION: ` лет`,
-};
-
 const Step = {
   COST: 100_000,
   PAYMENT: 5,
@@ -38,12 +27,16 @@ const Step = {
 };
 
 const CalculatorParams = (props) => {
-  const {className = ``} = props;
+  const {className, creditType} = props;
+
+  console.log(creditType);
+
+  const [deduction, setDeduction] = useState(0);
 
   const [
     currentFormatedCostString,
     setCurrentFormatedCostString
-  ] = React.useState(createFormatedValueString(INIT_COST_VALUE, InputPostfix.COST));
+  ] = React.useState(createFormatedValueString(INIT_COST_VALUE, Postfix.RUB));
 
   const minPayment = 0.1 * getCleanDigit(currentFormatedCostString);
   const maxPayment = 1 * getCleanDigit(currentFormatedCostString);
@@ -51,12 +44,12 @@ const CalculatorParams = (props) => {
   const [
     currentFormatedPaymentString,
     setCurrentFormatedPaymentString
-  ] = React.useState(createFormatedValueString(minPayment, InputPostfix.COST));
+  ] = React.useState(createFormatedValueString(minPayment, Postfix.RUB));
 
   const [
     currentFormatedDurationString,
     setCurrentFormatedDurationString
-  ] = React.useState(createFormatedValueString(DurationLimit.MIN, InputPostfix.DURATION));
+  ] = React.useState(createFormatedValueString(DurationLimit.MIN, Postfix.DURATION));
 
   React.useEffect(
       () => {
@@ -69,7 +62,7 @@ const CalculatorParams = (props) => {
           newPayment = maxPayment;
         }
 
-        setCurrentFormatedPaymentString(createFormatedValueString(newPayment, InputPostfix.COST));
+        setCurrentFormatedPaymentString(createFormatedValueString(newPayment, Postfix.RUB));
       },
       /* eslint-disable-next-line react-hooks/exhaustive-deps */
       [minPayment, maxPayment]
@@ -79,10 +72,21 @@ const CalculatorParams = (props) => {
       (value) => {
         const newValue = Math.round(getCleanDigit(value) / maxPayment * 100);
 
-        return createFormatedValueString(newValue, InputPostfix.PAYMENT);
+        return createFormatedValueString(newValue, Postfix.PERCENT);
       },
       [maxPayment]
   );
+
+  const handleMotherCapitalChange = React.useCallback(
+      ({target}) => {
+        setDeduction(target.checked ? MOTHER_CAPITAL : 0);
+      },
+      []
+  );
+
+  const cost = getCleanDigit(currentFormatedCostString);
+  const firstPayment = getCleanDigit(currentFormatedPaymentString);
+  const amount = cost - firstPayment - deduction;
 
   return (
     <div className={`${className} calculator-params`}>
@@ -97,7 +101,7 @@ const CalculatorParams = (props) => {
         stepValue={Step.COST}
         currentValue={currentFormatedCostString}
         onCurrentValueChange={setCurrentFormatedCostString}
-        postfix={InputPostfix.COST}
+        postfix={Postfix.RUB}
         controls={true}
         hint={true}
       />
@@ -107,7 +111,7 @@ const CalculatorParams = (props) => {
         minValue={minPayment}
         maxValue={maxPayment}
         stepValue={Step.COST}
-        postfix={InputPostfix.COST}
+        postfix={Postfix.RUB}
         minStrict={true}
         stepRange={Step.PAYMENT}
         rangeValue={currentFormatedPaymentString}
@@ -121,7 +125,7 @@ const CalculatorParams = (props) => {
         minValue={DurationLimit.MIN}
         maxValue={DurationLimit.MAX}
         stepValue={Step.DURATION}
-        postfix={InputPostfix.DURATION}
+        postfix={Postfix.DURATION}
         strict={true}
         stepRange={Step.DURATION}
         rangeValue={currentFormatedDurationString}
@@ -133,6 +137,7 @@ const CalculatorParams = (props) => {
           className="calculator-params__checkbox-input visually-hidden"
           type="checkbox"
           id="mother-capital"
+          onChange={handleMotherCapitalChange}
         />
         <label
           className="calculator-params__checkbox-label"
@@ -141,12 +146,23 @@ const CalculatorParams = (props) => {
           Использовать материнский капитал
         </label>
       </div>
+      <CalculatorOffer
+        creditType={creditType}
+        amount={amount}
+        firstPayment={firstPayment}
+        duration={getCleanDigit(currentFormatedDurationString)}
+      />
     </div>
   );
 };
 
+CalculatorParams.defaultProps = {
+  className: ``,
+};
+
 CalculatorParams.propTypes = {
   className: PropTypes.string,
+  creditType: PropTypes.string.isRequired,
 };
 
 export default CalculatorParams;

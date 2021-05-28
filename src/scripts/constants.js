@@ -30,10 +30,23 @@ const Breakpoint = {
 
 const REGEX_DIGITS = /^\d+$/;
 
+const CreditType = {
+  MORTAGE: `Ипотечное кредитование`,
+  AUTO: `Автомобильное кредитование`,
+};
+
+const Postfix = {
+  RUB: ` рублей`,
+  PERCENT: `%`,
+  DURATION: ` лет`,
+};
+
 export {
   FOCUS_ELEMENTS,
   Key,
   STORAGE_KEY,
   Breakpoint,
   REGEX_DIGITS,
+  CreditType,
+  Postfix,
 };

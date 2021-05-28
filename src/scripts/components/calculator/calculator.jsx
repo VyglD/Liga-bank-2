@@ -1,11 +1,7 @@
 import React from "react";
 import CalculatorTarget from "../calculator-target/calculator-target";
 import CalculatorParams from "../calculator-params/calculator-params";
-
-const CreditType = {
-  MORTAGE: `Ипотечное кредитование`,
-  AUTO: `Автомобильное кредитование`,
-};
+import {CreditType} from "../../constants";
 
 const Calculator = () => {
   const [selectedCreditType, setCreditType] = React.useState();
@@ -19,9 +15,10 @@ const Calculator = () => {
         onSelectItemClick={setCreditType}
       />
       {
-        selectedCreditType === CreditType.MORTAGE && (
+        selectedCreditType && (
           <CalculatorParams
             className="calculator__step-2"
+            creditType={selectedCreditType}
           />
         )
       }
