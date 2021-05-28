@@ -32,6 +32,7 @@ const CalculatorRange = (props) => {
     onCurrentRangeValueChange,
     formateRangeValue,
     moving,
+    rangeClass,
   } = props;
 
   const rangeRef = React.useRef();
@@ -181,7 +182,7 @@ const CalculatorRange = (props) => {
       />
       <div
         ref={rangeRef}
-        className="calculator-params__range"
+        className={`calculator-params__range ${rangeClass}`}
       >
         <div className="calculator-params__range-line">
           <button
@@ -224,6 +225,7 @@ const CalculatorRange = (props) => {
 CalculatorRange.defaultProps = {
   formateRangeValue: (view, postfix) => createFormatedValueString(view, postfix),
   moving: false,
+  rangeClass: ``,
 };
 
 CalculatorRange.propTypes = {
@@ -235,6 +237,7 @@ CalculatorRange.propTypes = {
   onCurrentRangeValueChange: PropTypes.func.isRequired,
   formateRangeValue: PropTypes.func,
   moving: PropTypes.bool,
+  rangeClass: PropTypes.string,
 };
 
 export default CalculatorRange;

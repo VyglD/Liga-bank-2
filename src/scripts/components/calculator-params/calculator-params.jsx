@@ -126,7 +126,21 @@ const CalculatorParams = (props) => {
         stepRange={Step.DURATION}
         rangeValue={currentFormatedDurationString}
         onCurrentRangeValueChange={setCurrentFormatedDurationString}
+        rangeClass={`calculator-params__range--duration`}
       />
+      <div className="calculator-params__checkbox">
+        <input
+          className="calculator-params__checkbox-input visually-hidden"
+          type="checkbox"
+          id="mother-capital"
+        />
+        <label
+          className="calculator-params__checkbox-label"
+          htmlFor="mother-capital"
+        >
+          Использовать материнский капитал
+        </label>
+      </div>
     </div>
   );
 };
