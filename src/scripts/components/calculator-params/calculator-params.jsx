@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import CalculatorInput from "../calculator-input/calculator-input";
 import CalculatorRange from "../calculator-range/calculator-range";
@@ -15,6 +15,11 @@ const CostLimit = {
   MAX: 25_000_000,
 };
 
+const PaymentLimit = {
+  MIN: 0.1,
+  MAX: 1,
+};
+
 const DurationLimit = {
   MIN: 5,
   MAX: 30,
@@ -29,17 +34,15 @@ const Step = {
 const CalculatorParams = (props) => {
   const {className, creditType} = props;
 
-  console.log(creditType);
-
-  const [deduction, setDeduction] = useState(0);
+  const [deduction, setDeduction] = React.useState(0);
 
   const [
     currentFormatedCostString,
     setCurrentFormatedCostString
   ] = React.useState(createFormatedValueString(INIT_COST_VALUE, Postfix.RUB));
 
-  const minPayment = 0.1 * getCleanDigit(currentFormatedCostString);
-  const maxPayment = 1 * getCleanDigit(currentFormatedCostString);
+  const minPayment = PaymentLimit.MIN * getCleanDigit(currentFormatedCostString);
+  const maxPayment = PaymentLimit.MAX * getCleanDigit(currentFormatedCostString);
 
   const [
     currentFormatedPaymentString,

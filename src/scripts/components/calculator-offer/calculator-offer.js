@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import ActionButton from "../action-button/action-button";
 import {createFormatedValueString} from "../../utils";
 import {CreditType, Postfix} from "../../constants";
 
@@ -23,12 +24,9 @@ const CalculatorOffer = (props) => {
   const minAmount = MinAmount[creditType];
   // const percent = firstPayment < PERCENT_BREAKPOINT ? Percent.FIRST : Percent.SECOND;
 
-
-
   // Нужно сравнивать процент первого взноса
 
-
-
+  window.console.log(firstPayment, duration, Percent, PERCENT_BREAKPOINT);
 
   // console.log(creditType, amount, minAmount, amount > minAmount);
   //
@@ -62,6 +60,12 @@ const CalculatorOffer = (props) => {
                   {/* <p className="calculator-offer__param-value">{wages}</p> */}
                 </li>
               </ul>
+              <ActionButton
+                href="#blank"
+                className="calculator-offer__button"
+              >
+                Оформить заявку
+              </ActionButton>
             </React.Fragment>
           )
           : (

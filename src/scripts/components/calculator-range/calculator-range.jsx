@@ -7,16 +7,17 @@ import {
   isLeftKey,
   isRightKey,
 } from "../../utils";
+import {Percentage} from "../../constants";
 
 const RANGE_OFFSET = `--line-progress`;
 
 const applyOffsetBorders = (offset) => {
-  if (offset < 0) {
-    offset = 0;
+  if (offset < Percentage.NULL) {
+    offset = Percentage.NULL;
   }
 
-  if (offset > 100) {
-    offset = 100;
+  if (offset > Percentage.ENTIRE) {
+    offset = Percentage.ENTIRE;
   }
 
   return offset;
@@ -37,7 +38,7 @@ const CalculatorRange = (props) => {
 
   const rangeRef = React.useRef();
 
-  const fraction = 100 / (maxValue - minValue);
+  const fraction = Percentage.ENTIRE / (maxValue - minValue);
 
   const setOffset = React.useCallback(
       (offset) => {
@@ -61,26 +62,32 @@ const CalculatorRange = (props) => {
   const calculateOffset = React.useCallback(
       (x) => {
         let offset = x - rangeRef.current.getBoundingClientRect().x;
-        offset = offset < 0 ? 0 : offset;
+        offset = offset < Percentage.NULL ? Percentage.NULL : offset;
         offset = offset > rangeRef.current.offsetWidth
           ? rangeRef.current.offsetWidth
           : offset;
 
-        return applyOffsetBorders(offset / rangeRef.current.offsetWidth * 100);
+        return applyOffsetBorders(
+            offset / rangeRef.current.offsetWidth * Percentage.ENTIRE
+        );
       },
       []
   );
 
   const setNewRangeValue = React.useCallback(
       (offset) => {
-        const roundRatio = Math.max(stepRange, fraction);
-        const roundOffset = Math.round(offset / roundRatio) * roundRatio;
-        const newValue = Math.round(roundOffset / fraction) + minValue;
+        const roundValue = Math.ceil(maxValue / Percentage.ENTIRE * stepRange);
+        const dirtyNewValue = Math.round(offset / fraction) + minValue;
+        const roundNewValue = Math.round(dirtyNewValue / roundValue) * roundValue;
+        const cleanNewValue = roundNewValue - minValue;
+        const roundNewOffset = cleanNewValue === Percentage.NULL
+          ? Percentage.NULL
+          : Math.round((roundNewValue - minValue) / (maxValue - minValue) * Percentage.ENTIRE);
 
-        onCurrentRangeValueChange(createFormatedValueString(newValue, postfix));
-        setOffset(roundOffset);
+        onCurrentRangeValueChange(createFormatedValueString(roundNewValue, postfix));
+        setOffset(roundNewOffset);
       },
-      [minValue, fraction, onCurrentRangeValueChange, postfix, setOffset, stepRange]
+      [minValue, maxValue, fraction, onCurrentRangeValueChange, postfix, setOffset, stepRange]
   );
 
   const handleMouseMove = React.useCallback(

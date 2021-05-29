@@ -41,6 +41,11 @@ const Postfix = {
   DURATION: ` лет`,
 };
 
+const Percentage = {
+  NULL: 0,
+  ENTIRE: 100,
+};
+
 export {
   FOCUS_ELEMENTS,
   Key,
@@ -49,4 +54,5 @@ export {
   REGEX_DIGITS,
   CreditType,
   Postfix,
+  Percentage,
 };
