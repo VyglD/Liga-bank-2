@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ActionButton from "../action-button/action-button";
-import {createFormatedValueString} from "../../utils";
-import {CreditType, Postfix} from "../../constants";
+import {createFormatedValueString, getFormatedDigitString} from "../../utils";
+import {CreditType, Percentage, Postfix} from "../../constants";
 
 const PERCENT_BREAKPOINT = 15;
 
@@ -16,20 +16,25 @@ const Percent = {
   SECOND: 8.50,
 };
 
-// wages
+const MONTHS = 12;
+
+const MIN_WAGES_PAYMENT = 45;
 
 const CalculatorOffer = (props) => {
-  const {creditType, amount, firstPayment, duration} = props;
+  const {creditType, amount, firstPaymentPercent, years} = props;
 
   const minAmount = MinAmount[creditType];
-  // const percent = firstPayment < PERCENT_BREAKPOINT ? Percent.FIRST : Percent.SECOND;
+  const percentRate = firstPaymentPercent < PERCENT_BREAKPOINT
+    ? Percent.FIRST
+    : Percent.SECOND;
 
-  // Нужно сравнивать процент первого взноса
+  const monthPercentRate = percentRate / Percentage.ENTIRE / MONTHS;
+  const monthNumber = years * MONTHS;
+  const monthPayment = Math.round(
+      amount * (monthPercentRate + monthPercentRate / (((1 + monthPercentRate) ** monthNumber) - 1))
+  );
 
-  window.console.log(firstPayment, duration, Percent, PERCENT_BREAKPOINT);
-
-  // console.log(creditType, amount, minAmount, amount > minAmount);
-  //
+  const wages = Math.round(monthPayment / MIN_WAGES_PAYMENT * Percentage.ENTIRE);
 
   return (
     <section className="calculator-offer">
@@ -48,16 +53,23 @@ const CalculatorOffer = (props) => {
                 <li className="calculator-offer__param-wrapper">
                   <p className="calculator-offer__param-title">Процентная ставка</p>
                   <p className="calculator-offer__param-value">
-                    {/* {createFormatedValueString(percent, Postfix.PERCENT).replace(`.`, `,`)} */}
+                    {
+                      createFormatedValueString(percentRate, Postfix.PERCENT)
+                        .replace(`.`, `,`)
+                    }
                   </p>
                 </li>
                 <li className="calculator-offer__param-wrapper">
                   <p className="calculator-offer__param-title">Ежемесячный платеж</p>
-                  {/* <p className="calculator-offer__param-value">{payment}</p> */}
+                  <p className="calculator-offer__param-value">
+                    {createFormatedValueString(monthPayment, Postfix.RUB)}
+                  </p>
                 </li>
                 <li className="calculator-offer__param-wrapper">
                   <p className="calculator-offer__param-title">Необходимый доход</p>
-                  {/* <p className="calculator-offer__param-value">{wages}</p> */}
+                  <p className="calculator-offer__param-value">
+                    {createFormatedValueString(wages, Postfix.RUB)}
+                  </p>
                 </li>
               </ul>
               <ActionButton
@@ -71,7 +83,8 @@ const CalculatorOffer = (props) => {
           : (
             <React.Fragment>
               <h3 className="calculator-offer__title">
-                Наш банк не выдаёт ипотечные кредиты меньше 200 000 рублей.
+                Наш банк не выдаёт ипотечные кредиты меньше&thinsp;
+                {getFormatedDigitString(minAmount)} рублей.
               </h3>
               <p className="calculator-offer__description">
                 Попробуйте использовать другие параметры для расчёта.
@@ -86,8 +99,8 @@ const CalculatorOffer = (props) => {
 CalculatorOffer.propTypes = {
   creditType: PropTypes.string.isRequired,
   amount: PropTypes.number.isRequired,
-  firstPayment: PropTypes.number.isRequired,
-  duration: PropTypes.number.isRequired,
+  firstPaymentPercent: PropTypes.number.isRequired,
+  years: PropTypes.number.isRequired,
 };
 
 export default CalculatorOffer;

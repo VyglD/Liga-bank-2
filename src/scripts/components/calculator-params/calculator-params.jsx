@@ -4,7 +4,7 @@ import CalculatorInput from "../calculator-input/calculator-input";
 import CalculatorRange from "../calculator-range/calculator-range";
 import CalculatorOffer from "../calculator-offer/calculator-offer";
 import {createFormatedValueString, getCleanDigit} from "../../utils";
-import {Postfix} from "../../constants";
+import {Postfix, Percentage} from "../../constants";
 
 const INIT_COST_VALUE = 2_000_000;
 
@@ -90,6 +90,7 @@ const CalculatorParams = (props) => {
   const cost = getCleanDigit(currentFormatedCostString);
   const firstPayment = getCleanDigit(currentFormatedPaymentString);
   const amount = cost - firstPayment - deduction;
+  const firstPaymentPercent = Math.round((firstPayment / cost) * Percentage.ENTIRE);
 
   return (
     <div className={`${className} calculator-params`}>
@@ -152,8 +153,8 @@ const CalculatorParams = (props) => {
       <CalculatorOffer
         creditType={creditType}
         amount={amount}
-        firstPayment={firstPayment}
-        duration={getCleanDigit(currentFormatedDurationString)}
+        firstPaymentPercent={firstPaymentPercent}
+        years={getCleanDigit(currentFormatedDurationString)}
       />
     </div>
   );
