@@ -1,10 +1,12 @@
 import React from "react";
 import CalculatorTarget from "../calculator-target/calculator-target";
 import CalculatorParams from "../calculator-params/calculator-params";
+import CalculatorApplication from "../calculator-application/calculator-application";
 import {CreditType} from "../../constants";
 
 const Calculator = () => {
-  const [selectedCreditType, setCreditType] = React.useState();
+  const [selectedCreditType, setCreditType] = React.useState(null);
+  const [application, setApplication] = React.useState(null);
 
   return (
     <section className="calculator">
@@ -19,6 +21,16 @@ const Calculator = () => {
           <CalculatorParams
             className="calculator__step-2"
             creditType={selectedCreditType}
+            onApplicationCreate={setApplication}
+          />
+        )
+      }
+      {
+        application && (
+          <CalculatorApplication
+            className="calculator__step-3"
+            application={application}
+            onApplicationSubmit={setApplication}
           />
         )
       }

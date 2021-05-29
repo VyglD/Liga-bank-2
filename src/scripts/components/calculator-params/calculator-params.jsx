@@ -32,7 +32,7 @@ const Step = {
 };
 
 const CalculatorParams = (props) => {
-  const {className, creditType} = props;
+  const {className, creditType, onApplicationCreate} = props;
 
   const [deduction, setDeduction] = React.useState(0);
 
@@ -91,6 +91,27 @@ const CalculatorParams = (props) => {
   const firstPayment = getCleanDigit(currentFormatedPaymentString);
   const amount = cost - firstPayment - deduction;
   const firstPaymentPercent = Math.round((firstPayment / cost) * Percentage.ENTIRE);
+  const years = getCleanDigit(currentFormatedDurationString);
+
+  const handleButtonClick = React.useCallback(
+      () => {
+        const application = {
+          creditType,
+          cost: currentFormatedCostString,
+          firstPayment: currentFormatedPaymentString,
+          duration: currentFormatedDurationString,
+        };
+
+        onApplicationCreate(application);
+      },
+      [
+        creditType,
+        currentFormatedCostString,
+        currentFormatedPaymentString,
+        currentFormatedDurationString,
+        onApplicationCreate
+      ]
+  );
 
   return (
     <div className={`${className} calculator-params`}>
@@ -154,7 +175,8 @@ const CalculatorParams = (props) => {
         creditType={creditType}
         amount={amount}
         firstPaymentPercent={firstPaymentPercent}
-        years={getCleanDigit(currentFormatedDurationString)}
+        years={years}
+        onApplyButtonClick={handleButtonClick}
       />
     </div>
   );
@@ -167,6 +189,7 @@ CalculatorParams.defaultProps = {
 CalculatorParams.propTypes = {
   className: PropTypes.string,
   creditType: PropTypes.string.isRequired,
+  onApplicationCreate: PropTypes.func.isRequired,
 };
 
 export default CalculatorParams;

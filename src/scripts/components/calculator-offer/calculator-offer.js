@@ -21,7 +21,13 @@ const MONTHS = 12;
 const MIN_WAGES_PAYMENT = 45;
 
 const CalculatorOffer = (props) => {
-  const {creditType, amount, firstPaymentPercent, years} = props;
+  const {
+    creditType,
+    amount,
+    firstPaymentPercent,
+    years,
+    onApplyButtonClick,
+  } = props;
 
   const minAmount = MinAmount[creditType];
   const percentRate = firstPaymentPercent < PERCENT_BREAKPOINT
@@ -73,8 +79,9 @@ const CalculatorOffer = (props) => {
                 </li>
               </ul>
               <ActionButton
-                href="#blank"
+                type="button"
                 className="calculator-offer__button"
+                onClick={onApplyButtonClick}
               >
                 Оформить заявку
               </ActionButton>
@@ -101,6 +108,7 @@ CalculatorOffer.propTypes = {
   amount: PropTypes.number.isRequired,
   firstPaymentPercent: PropTypes.number.isRequired,
   years: PropTypes.number.isRequired,
+  onApplyButtonClick: PropTypes.func.isRequired,
 };
 
 export default CalculatorOffer;
