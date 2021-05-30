@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Inputmask from "inputmask";
 import ActionButton from "../action-button/action-button";
-import {getCleanDigit} from "../../utils";
+import {getCleanDigit, toggleAnimateClass} from "../../utils";
 import {STORAGE_KEY} from "../../constants";
 
 const STORAGE_APPLICATION_KEY = `${STORAGE_KEY}-application`;
@@ -71,19 +71,6 @@ const CalculatorApplication = (props) => {
   const [nameValue, setNameValue] = React.useState(name);
   const [phoneValue, setPhoneValue] = React.useState(phone);
   const [emailValue, setEmailValue] = React.useState(email);
-
-  const setFormStatus = React.useCallback(
-      (isValid) => {
-        if (isValid && (formRef.current.classList.contains(CustomClass.INVALID_FORM))) {
-          formRef.current.classList.remove(CustomClass.INVALID_FORM);
-        } else {
-          if (!formRef.current.classList.contains(CustomClass.INVALID_FORM)) {
-            formRef.current.classList.add(CustomClass.INVALID_FORM);
-          }
-        }
-      },
-      []
-  );
 
   const setError = React.useCallback(
       (node, errorMessage) => {
@@ -167,7 +154,7 @@ const CalculatorApplication = (props) => {
         isFormValid = validatePhoneField() && isFormValid;
         isFormValid = validateEmailField() && isFormValid;
 
-        setFormStatus(isFormValid);
+        toggleAnimateClass(formRef.current, isFormValid, CustomClass.INVALID_FORM);
 
         if (isFormValid) {
           const applicationData = {
@@ -192,7 +179,6 @@ const CalculatorApplication = (props) => {
         validateNameField,
         validatePhoneField,
         validateEmailField,
-        setFormStatus,
         number,
         nameValue,
         phoneValue,
@@ -300,7 +286,7 @@ const CalculatorApplication = (props) => {
         action=""
         method="post"
         onSubmit={handleFormSubmit}
-        onAnimationEnd={() => setFormStatus(true)}
+        onAnimationEnd={() => toggleAnimateClass(formRef.current, true, CustomClass.INVALID_FORM)}
       >
         <div className="calculator-application__input-wrapper">
           <p

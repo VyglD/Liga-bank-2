@@ -83,6 +83,16 @@ const createFormatedValueString = (value, postfix) => {
   return `${getFormatedDigitString(value)}${postfix}`;
 };
 
+const toggleAnimateClass = (form, isValid, invalidClass) => {
+  if (isValid && (form.classList.contains(invalidClass))) {
+    form.classList.remove(invalidClass);
+  } else {
+    if (!form.classList.contains(invalidClass)) {
+      form.classList.add(invalidClass);
+    }
+  }
+};
+
 export {
   getFocusableElements,
   isEscKeyDown,
@@ -95,4 +105,5 @@ export {
   getCleanDigit,
   getFormatedDigitString,
   createFormatedValueString,
+  toggleAnimateClass,
 };
