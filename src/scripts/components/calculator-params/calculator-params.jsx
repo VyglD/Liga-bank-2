@@ -5,41 +5,28 @@ import CalculatorRange from "../calculator-range/calculator-range";
 import CalculatorOffer from "../calculator-offer/calculator-offer";
 import {createFormatedValueString, getCleanDigit} from "../../utils";
 import {Postfix, Percentage} from "../../constants";
-
-const INIT_COST_VALUE = 2_000_000;
-
-const MOTHER_CAPITAL = 470_000;
-
-const CostLimit = {
-  MIN: 1_200_000,
-  MAX: 25_000_000,
-};
-
-const PaymentLimit = {
-  MIN: 0.1,
-  MAX: 1,
-};
-
-const DurationLimit = {
-  MIN: 5,
-  MAX: 30,
-};
-
-const Step = {
-  COST: 100_000,
-  PAYMENT: 5,
-  DURATION: 1,
-};
+import {limitType, stepType} from "../../types";
 
 const CalculatorParams = (props) => {
-  const {className, creditType, onApplicationCreate} = props;
-
-  const [deduction, setDeduction] = React.useState(0);
+  const {children, className, calculatorParams, onApplicationCreate} = props;
+  const {
+    creditType,
+    initCostValue,
+    Step,
+    PaymentLimit,
+    DurationLimit,
+    CostLimit,
+    minAmount,
+    calculateAmount,
+    calculatePercentRate,
+  } = calculatorParams;
 
   const [
     currentFormatedCostString,
     setCurrentFormatedCostString
-  ] = React.useState(createFormatedValueString(INIT_COST_VALUE, Postfix.RUB));
+  ] = React.useState(createFormatedValueString(initCostValue, Postfix.RUB));
+
+  const [isCorrectCost, setCostStatus] = React.useState(true);
 
   const minPayment = PaymentLimit.MIN * getCleanDigit(currentFormatedCostString);
   const maxPayment = PaymentLimit.MAX * getCleanDigit(currentFormatedCostString);
@@ -80,17 +67,10 @@ const CalculatorParams = (props) => {
       [maxPayment]
   );
 
-  const handleMotherCapitalChange = React.useCallback(
-      ({target}) => {
-        setDeduction(target.checked ? MOTHER_CAPITAL : 0);
-      },
-      []
-  );
-
   const cost = getCleanDigit(currentFormatedCostString);
   const firstPayment = getCleanDigit(currentFormatedPaymentString);
-  const amount = cost - firstPayment - deduction;
-  const firstPaymentPercent = Math.round((firstPayment / cost) * Percentage.ENTIRE);
+  const amount = calculateAmount(cost, firstPayment);
+  const percentRate = calculatePercentRate(cost, firstPayment);
   const years = getCleanDigit(currentFormatedDurationString);
 
   const handleButtonClick = React.useCallback(
@@ -129,6 +109,7 @@ const CalculatorParams = (props) => {
         postfix={Postfix.RUB}
         controls={true}
         hint={true}
+        onValidStatusChange={setCostStatus}
       />
       <CalculatorRange
         labelText="Первоначальный взнос"
@@ -157,26 +138,14 @@ const CalculatorParams = (props) => {
         onCurrentRangeValueChange={setCurrentFormatedDurationString}
         rangeClass={`calculator-params__range--duration`}
       />
-      <div className="calculator-params__checkbox">
-        <input
-          className="calculator-params__checkbox-input visually-hidden"
-          type="checkbox"
-          id="mother-capital"
-          onChange={handleMotherCapitalChange}
-        />
-        <label
-          className="calculator-params__checkbox-label"
-          htmlFor="mother-capital"
-        >
-          Использовать материнский капитал
-        </label>
-      </div>
+      {children}
       <CalculatorOffer
-        creditType={creditType}
+        minAmount={minAmount}
         amount={amount}
-        firstPaymentPercent={firstPaymentPercent}
+        percentRate={percentRate}
         years={years}
         onApplyButtonClick={handleButtonClick}
+        isButtonEnabled={isCorrectCost}
       />
     </div>
   );
@@ -187,8 +156,19 @@ CalculatorParams.defaultProps = {
 };
 
 CalculatorParams.propTypes = {
+  children: PropTypes.node,
   className: PropTypes.string,
-  creditType: PropTypes.string.isRequired,
+  calculatorParams: PropTypes.exact({
+    creditType: PropTypes.string.isRequired,
+    initCostValue: PropTypes.number.isRequired,
+    Step: stepType,
+    PaymentLimit: limitType,
+    DurationLimit: limitType,
+    CostLimit: limitType,
+    minAmount: PropTypes.number.isRequired,
+    calculateAmount: PropTypes.func.isRequired,
+    calculatePercentRate: PropTypes.func.isRequired,
+  }).isRequired,
   onApplicationCreate: PropTypes.func.isRequired,
 };
 

@@ -2,37 +2,20 @@ import React from "react";
 import PropTypes from "prop-types";
 import ActionButton from "../action-button/action-button";
 import {createFormatedValueString, getFormatedDigitString} from "../../utils";
-import {CreditType, Percentage, Postfix} from "../../constants";
-
-const PERCENT_BREAKPOINT = 15;
-
-const MinAmount = {
-  [CreditType.MORTAGE]: 500_000,
-  [CreditType.AUTO]: 200_000,
-};
-
-const Percent = {
-  FIRST: 9.40,
-  SECOND: 8.50,
-};
+import {Percentage, Postfix} from "../../constants";
 
 const MONTHS = 12;
-
 const MIN_WAGES_PAYMENT = 45;
 
 const CalculatorOffer = (props) => {
   const {
-    creditType,
+    minAmount,
     amount,
-    firstPaymentPercent,
+    percentRate,
     years,
     onApplyButtonClick,
+    isButtonEnabled,
   } = props;
-
-  const minAmount = MinAmount[creditType];
-  const percentRate = firstPaymentPercent < PERCENT_BREAKPOINT
-    ? Percent.FIRST
-    : Percent.SECOND;
 
   const monthPercentRate = percentRate / Percentage.ENTIRE / MONTHS;
   const monthNumber = years * MONTHS;
@@ -82,6 +65,7 @@ const CalculatorOffer = (props) => {
                 type="button"
                 className="calculator-offer__button"
                 onClick={onApplyButtonClick}
+                disabled={!isButtonEnabled}
               >
                 Оформить заявку
               </ActionButton>
@@ -104,11 +88,12 @@ const CalculatorOffer = (props) => {
 };
 
 CalculatorOffer.propTypes = {
-  creditType: PropTypes.string.isRequired,
+  minAmount: PropTypes.number.isRequired,
   amount: PropTypes.number.isRequired,
-  firstPaymentPercent: PropTypes.number.isRequired,
+  percentRate: PropTypes.number.isRequired,
   years: PropTypes.number.isRequired,
   onApplyButtonClick: PropTypes.func.isRequired,
+  isButtonEnabled: PropTypes.bool.isRequired,
 };
 
 export default CalculatorOffer;

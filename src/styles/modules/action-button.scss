@@ -38,6 +38,12 @@
   }
 }
 
+.action-button:disabled {
+  cursor: default;
+
+  filter: grayscale(1);
+}
+
 @media (min-width: $tablet-breakpoint) {
   .action-button {
     padding-bottom: 20px;
