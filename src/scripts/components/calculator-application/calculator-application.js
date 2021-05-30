@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Inputmask from "inputmask";
 import ActionButton from "../action-button/action-button";
 import {getCleanDigit} from "../../utils";
 import {STORAGE_KEY} from "../../constants";
@@ -7,6 +8,19 @@ import {STORAGE_KEY} from "../../constants";
 const STORAGE_APPLICATION_KEY = `${STORAGE_KEY}-application`;
 
 const FIRST_APPLICATION_NUMBER = `0010`;
+
+const ERROR_DISPLAY_CLASS = `calculator-application__input-error--display`;
+
+const Regex = {
+  PHONE: /^((8|([+]?7))([-]| )?)?([(]?[0-9]{3}[)]?([-]| )?)([0-9]|[-]| ){7,10}$/u,
+  EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+};
+
+const ErrorMessage = {
+  EMPTY: `Обязательно для заполнения`,
+  PHONE: `Неверный формат номера`,
+  EMAIL: `Неверный формат email адреса`,
+};
 
 const getApplicationData = () => {
   const applicationData = JSON.parse(localStorage.getItem(STORAGE_APPLICATION_KEY));
@@ -30,53 +44,180 @@ const setApplicationData = (applicationData) => {
   localStorage.setItem(STORAGE_APPLICATION_KEY, JSON.stringify(applicationData));
 };
 
+const isEmpty = (value) => {
+  return value.trim().length === 0;
+};
+
 const CalculatorApplication = (props) => {
   const {className, application, onApplicationSubmit} = props;
   const {creditType, cost, firstPayment, duration} = application;
   const {number, name, phone, email} = getApplicationData();
 
+  const isSending = React.useRef(false);
+
+  const nameRef = React.useRef();
+  const phoneRef = React.useRef();
+  const emailRef = React.useRef();
+
+  const nameErrorRef = React.useRef();
+  const phoneErrorRef = React.useRef();
+  const emailErrorRef = React.useRef();
+
   const [nameValue, setNameValue] = React.useState(name);
   const [phoneValue, setPhoneValue] = React.useState(phone);
   const [emailValue, setEmailValue] = React.useState(email);
+
+  const setError = React.useCallback(
+      (node, errorMessage) => {
+        node.innerText = errorMessage;
+
+        if (!node.classList.contains(ERROR_DISPLAY_CLASS)) {
+          node.classList.add(ERROR_DISPLAY_CLASS);
+        }
+      },
+      []
+  );
+
+  const hideError = React.useCallback(
+      (node) => {
+        node.innerText = ``;
+
+        if (node.classList.contains(ERROR_DISPLAY_CLASS)) {
+          node.classList.remove(ERROR_DISPLAY_CLASS);
+        }
+      },
+      []
+  );
+
+  const validateNameField = React.useCallback(
+      () => {
+        const value = nameRef.current.value;
+
+        if (isEmpty(value)) {
+          setError(nameErrorRef.current, ErrorMessage.EMPTY);
+          return false;
+        }
+
+        hideError(nameErrorRef.current);
+        return true;
+      },
+      [setError, hideError]
+  );
+
+  const validatePhoneField = React.useCallback(
+      () => {
+        const value = phoneRef.current.value;
+
+        if (isEmpty(value)) {
+          setError(phoneErrorRef.current, ErrorMessage.EMPTY);
+          return false;
+        } else if (!Regex.PHONE.test(String(value).toLowerCase())) {
+          setError(phoneErrorRef.current, ErrorMessage.PHONE);
+          return false;
+        }
+
+        hideError(phoneErrorRef.current);
+        return true;
+      },
+      [setError, hideError]
+  );
+
+  const validateEmailField = React.useCallback(
+      () => {
+        const value = emailRef.current.value;
+
+        if (isEmpty(value)) {
+          setError(emailErrorRef.current, ErrorMessage.EMPTY);
+          return false;
+        } else if (!Regex.EMAIL.test(String(value).toLowerCase())) {
+          setError(emailErrorRef.current, ErrorMessage.EMAIL);
+          return false;
+        }
+
+        hideError(emailErrorRef.current);
+        return true;
+      },
+      [setError, hideError]
+  );
 
   const handleFormSubmit = React.useCallback(
       (evt) => {
         evt.preventDefault();
 
-        const applicationData = {
-          number,
-          name: nameValue,
-          phone: phoneValue,
-          email: emailValue,
-        };
+        let isFormValid = true;
+        isFormValid = validateNameField() && isFormValid;
+        isFormValid = validatePhoneField() && isFormValid;
+        isFormValid = validateEmailField() && isFormValid;
 
-        setApplicationData(applicationData);
+        if (isFormValid) {
+          const applicationData = {
+            number,
+            name: nameValue,
+            phone: phoneValue,
+            email: emailValue,
+          };
 
-        onApplicationSubmit(null);
+          setApplicationData(applicationData);
+
+          onApplicationSubmit(null);
+        } else {
+          isSending.current = true;
+        }
       },
-      [number, nameValue, phoneValue, emailValue, onApplicationSubmit]
+      [
+        validateNameField,
+        validatePhoneField,
+        validateEmailField,
+        number,
+        nameValue,
+        phoneValue,
+        emailValue,
+        onApplicationSubmit
+      ]
   );
 
-  const handleNameChange = React.useCallback(
+  const handleNameInput = React.useCallback(
       ({target}) => {
+
+        if (isSending.current) {
+          validateNameField();
+        }
 
         setNameValue(target.value);
       },
-      []
+      [validateNameField]
   );
 
-  const handlePhoneChange = React.useCallback(
+  const handlePhoneInput = React.useCallback(
       ({target}) => {
+
+        if (isSending.current) {
+          validatePhoneField();
+        }
 
         setPhoneValue(target.value);
       },
-      []
+      [validatePhoneField]
   );
 
-  const handleEmailChange = React.useCallback(
+  const handleEmailInput = React.useCallback(
       ({target}) => {
 
+        if (isSending.current) {
+          validateEmailField();
+        }
+
         setEmailValue(target.value);
+      },
+      [validateEmailField]
+  );
+
+  React.useEffect(
+      () => {
+        nameRef.current.focus();
+
+        const phoneMask = new Inputmask(`+7 (999) 999-99-99`);
+        phoneMask.mask(phoneRef.current);
       },
       []
   );
@@ -134,27 +275,54 @@ const CalculatorApplication = (props) => {
         method="post"
         onSubmit={handleFormSubmit}
       >
-        <input
-          className="calculator-application__input"
-          type="text"
-          name="name"
-          value={nameValue}
-          onChange={handleNameChange}
-        />
-        <input
-          className="calculator-application__input"
-          type="phone"
-          name="phone"
-          value={phoneValue}
-          onChange={handlePhoneChange}
-        />
-        <input
-          className="calculator-application__input"
-          type="email"
-          name="email"
-          value={emailValue}
-          onChange={handleEmailChange}
-        />
+        <div className="calculator-application__input-wrapper">
+          <p
+            ref={nameErrorRef}
+            className="calculator-application__input-error"
+          >
+          </p>
+          <input
+            ref={nameRef}
+            className="calculator-application__input"
+            type="text"
+            name="name"
+            value={nameValue}
+            onInput={handleNameInput}
+            required
+          />
+        </div>
+        <div className="calculator-application__input-wrapper">
+          <p
+            ref={phoneErrorRef}
+            className="calculator-application__input-error"
+          >
+          </p>
+          <input
+            ref={phoneRef}
+            className="calculator-application__input"
+            type="tel"
+            name="phone"
+            value={phoneValue}
+            onInput={handlePhoneInput}
+            required
+          />
+        </div>
+        <div className="calculator-application__input-wrapper">
+          <p
+            ref={emailErrorRef}
+            className="calculator-application__input-error"
+          >
+          </p>
+          <input
+            ref={emailRef}
+            className="calculator-application__input"
+            type="email"
+            name="email"
+            value={emailValue}
+            onInput={handleEmailInput}
+            required
+          />
+        </div>
         <ActionButton
           className=""
           type="submit"
