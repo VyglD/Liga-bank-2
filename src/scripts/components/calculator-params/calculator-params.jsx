@@ -73,7 +73,7 @@ const CalculatorParams = (props) => {
 
   const formateRangePayment = React.useCallback(
       (value) => {
-        const newValue = Math.round(getCleanDigit(value) / maxPayment * 100);
+        const newValue = Math.round(getCleanDigit(value) / maxPayment * Percentage.ENTIRE);
 
         return createFormatedValueString(newValue, Postfix.PERCENT);
       },

@@ -159,7 +159,7 @@ const CalculatorApplication = (props) => {
 
           setApplicationData(applicationData);
 
-          onApplicationSubmit(null);
+          onApplicationSubmit();
         } else {
           isSending.current = true;
         }
