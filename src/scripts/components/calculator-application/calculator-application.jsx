@@ -9,7 +9,10 @@ const STORAGE_APPLICATION_KEY = `${STORAGE_KEY}-application`;
 
 const FIRST_APPLICATION_NUMBER = `0010`;
 
-const ERROR_DISPLAY_CLASS = `calculator-application__input-error--display`;
+const CustomClass = {
+  INVALID_FORM: `calculator-application__form--invalid`,
+  DISPLAY_ERROR: `calculator-application__input-error--display`,
+};
 
 const Regex = {
   PHONE: /^((8|([+]?7))([-]| )?)?([(]?[0-9]{3}[)]?([-]| )?)([0-9]|[-]| ){7,10}$/u,
@@ -55,6 +58,8 @@ const CalculatorApplication = (props) => {
 
   const isSending = React.useRef(false);
 
+  const formRef = React.useRef();
+
   const nameRef = React.useRef();
   const phoneRef = React.useRef();
   const emailRef = React.useRef();
@@ -67,12 +72,25 @@ const CalculatorApplication = (props) => {
   const [phoneValue, setPhoneValue] = React.useState(phone);
   const [emailValue, setEmailValue] = React.useState(email);
 
+  const setFormStatus = React.useCallback(
+      (isValid) => {
+        if (isValid && (formRef.current.classList.contains(CustomClass.INVALID_FORM))) {
+          formRef.current.classList.remove(CustomClass.INVALID_FORM);
+        } else {
+          if (!formRef.current.classList.contains(CustomClass.INVALID_FORM)) {
+            formRef.current.classList.add(CustomClass.INVALID_FORM);
+          }
+        }
+      },
+      []
+  );
+
   const setError = React.useCallback(
       (node, errorMessage) => {
         node.innerText = errorMessage;
 
-        if (!node.classList.contains(ERROR_DISPLAY_CLASS)) {
-          node.classList.add(ERROR_DISPLAY_CLASS);
+        if (!node.classList.contains(CustomClass.DISPLAY_ERROR)) {
+          node.classList.add(CustomClass.DISPLAY_ERROR);
         }
       },
       []
@@ -82,8 +100,8 @@ const CalculatorApplication = (props) => {
       (node) => {
         node.innerText = ``;
 
-        if (node.classList.contains(ERROR_DISPLAY_CLASS)) {
-          node.classList.remove(ERROR_DISPLAY_CLASS);
+        if (node.classList.contains(CustomClass.DISPLAY_ERROR)) {
+          node.classList.remove(CustomClass.DISPLAY_ERROR);
         }
       },
       []
@@ -149,6 +167,8 @@ const CalculatorApplication = (props) => {
         isFormValid = validatePhoneField() && isFormValid;
         isFormValid = validateEmailField() && isFormValid;
 
+        setFormStatus(isFormValid);
+
         if (isFormValid) {
           const applicationData = {
             number,
@@ -162,12 +182,17 @@ const CalculatorApplication = (props) => {
           onApplicationSubmit();
         } else {
           isSending.current = true;
+
+          if (!formRef.current.classList.contains(CustomClass.INVALID_FORM)) {
+            formRef.current.classList.add(CustomClass.INVALID_FORM);
+          }
         }
       },
       [
         validateNameField,
         validatePhoneField,
         validateEmailField,
+        setFormStatus,
         number,
         nameValue,
         phoneValue,
@@ -270,10 +295,12 @@ const CalculatorApplication = (props) => {
         </li>
       </ul>
       <form
+        ref={formRef}
         className="calculator-application__form"
         action=""
         method="post"
         onSubmit={handleFormSubmit}
+        onAnimationEnd={() => setFormStatus(true)}
       >
         <div className="calculator-application__input-wrapper">
           <p

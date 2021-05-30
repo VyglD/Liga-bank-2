@@ -1,6 +1,7 @@
 import React from "react";
 import CalculatorTarget from "../calculator-target/calculator-target";
 import CalculatorCreditMortage from "../calculator-credit-mortage/calculator-credit-mortage";
+import CalculatorCreditAuto from "../calculator-credit-auto/calculator-credit-auto";
 import CalculatorApplication from "../calculator-application/calculator-application";
 import Popup from "../popup/popup";
 import {CreditType} from "../../constants";
@@ -46,8 +47,16 @@ const Calculator = () => {
         onSelectItemClick={setCreditType}
       />
       {
-        selectedCreditType && (
+        selectedCreditType && (selectedCreditType === CreditType.MORTAGE) && (
           <CalculatorCreditMortage
+            className="calculator__step-2"
+            onApplicationCreate={setApplication}
+          />
+        )
+      }
+      {
+        selectedCreditType && (selectedCreditType === CreditType.AUTO) && (
+          <CalculatorCreditAuto
             className="calculator__step-2"
             onApplicationCreate={setApplication}
           />

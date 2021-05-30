@@ -15,6 +15,8 @@ const CalculatorOffer = (props) => {
     years,
     onApplyButtonClick,
     isButtonEnabled,
+    offerTitle,
+    creditProperty,
   } = props;
 
   const monthPercentRate = percentRate / Percentage.ENTIRE / MONTHS;
@@ -34,7 +36,7 @@ const CalculatorOffer = (props) => {
               <h3 className="calculator-offer__title">Наше предложение</h3>
               <ul className="calculator-offer__params">
                 <li className="calculator-offer__param-wrapper">
-                  <p className="calculator-offer__param-title">Сумма ипотеки</p>
+                  <p className="calculator-offer__param-title">{offerTitle}</p>
                   <p className="calculator-offer__param-value">
                     {createFormatedValueString(amount, Postfix.RUB)}
                   </p>
@@ -74,8 +76,7 @@ const CalculatorOffer = (props) => {
           : (
             <React.Fragment>
               <h3 className="calculator-offer__title">
-                Наш банк не выдаёт ипотечные кредиты меньше&thinsp;
-                {getFormatedDigitString(minAmount)} рублей.
+                Наш банк не выдаёт {creditProperty} меньше {getFormatedDigitString(minAmount)} рублей.
               </h3>
               <p className="calculator-offer__description">
                 Попробуйте использовать другие параметры для расчёта.
@@ -94,6 +95,8 @@ CalculatorOffer.propTypes = {
   years: PropTypes.number.isRequired,
   onApplyButtonClick: PropTypes.func.isRequired,
   isButtonEnabled: PropTypes.bool.isRequired,
+  offerTitle: PropTypes.string.isRequired,
+  creditProperty: PropTypes.string.isRequired,
 };
 
 export default CalculatorOffer;

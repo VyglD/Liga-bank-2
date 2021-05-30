@@ -31,7 +31,7 @@ const CalculatorInput = (props) => {
     onCurrentValueChange,
     postfix,
     controls,
-    hint,
+    hintText,
     strict,
     minStrict,
     maxStrict,
@@ -198,9 +198,9 @@ const CalculatorInput = (props) => {
         }
       </div>
       {
-        hint && (
+        hintText && (
           <p className="calculator-params__input-hint">
-            От {getFormatedDigitString(minValue)} до {createFormatedValueString(maxValue, postfix)}
+            {hintText}
           </p>
         )
       }
@@ -217,7 +217,7 @@ CalculatorInput.defaultProps = {
   strict: false,
   minStrict: false,
   maxStrict: false,
-  hint: false,
+  hintText: ``,
   onValidStatusChange: () => {},
 };
 
@@ -236,7 +236,7 @@ CalculatorInput.propTypes = {
   strict: PropTypes.bool,
   minStrict: PropTypes.bool,
   maxStrict: PropTypes.bool,
-  hint: PropTypes.bool,
+  hintText: PropTypes.string,
   onValidStatusChange: PropTypes.func,
 };
 

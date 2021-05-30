@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import CalculatorInput from "../calculator-input/calculator-input";
 import CalculatorRange from "../calculator-range/calculator-range";
 import CalculatorOffer from "../calculator-offer/calculator-offer";
-import {createFormatedValueString, getCleanDigit} from "../../utils";
+import {
+  createFormatedValueString,
+  getCleanDigit,
+  getFormatedDigitString
+} from "../../utils";
 import {Postfix, Percentage} from "../../constants";
 import {limitType, stepType} from "../../types";
 
@@ -19,6 +23,9 @@ const CalculatorParams = (props) => {
     minAmount,
     calculateAmount,
     calculatePercentRate,
+    costTitle,
+    offerTitle,
+    creditProperty,
   } = calculatorParams;
 
   const [
@@ -99,7 +106,7 @@ const CalculatorParams = (props) => {
         Шаг 2. Введите параметры кредита
       </h3>
       <CalculatorInput
-        labelText="Стоимость недвижимости"
+        labelText={costTitle}
         inputId="input-cost"
         minValue={CostLimit.MIN}
         maxValue={CostLimit.MAX}
@@ -108,7 +115,7 @@ const CalculatorParams = (props) => {
         onCurrentValueChange={setCurrentFormatedCostString}
         postfix={Postfix.RUB}
         controls={true}
-        hint={true}
+        hintText={`От ${getFormatedDigitString(CostLimit.MIN)} до ${createFormatedValueString(CostLimit.MAX, Postfix.RUB)}`}
         onValidStatusChange={setCostStatus}
       />
       <CalculatorRange
@@ -146,6 +153,8 @@ const CalculatorParams = (props) => {
         years={years}
         onApplyButtonClick={handleButtonClick}
         isButtonEnabled={isCorrectCost}
+        offerTitle={offerTitle}
+        creditProperty={creditProperty}
       />
     </div>
   );
@@ -168,6 +177,9 @@ CalculatorParams.propTypes = {
     minAmount: PropTypes.number.isRequired,
     calculateAmount: PropTypes.func.isRequired,
     calculatePercentRate: PropTypes.func.isRequired,
+    costTitle: PropTypes.string.isRequired,
+    offerTitle: PropTypes.string.isRequired,
+    creditProperty: PropTypes.string.isRequired,
   }).isRequired,
   onApplicationCreate: PropTypes.func.isRequired,
 };

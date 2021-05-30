@@ -7,6 +7,12 @@ const INIT_COST_VALUE = 2_000_000;
 const MIN_AMOUNT = 500_000;
 const PERCENT_BREAKPOINT = 15;
 
+const CustomString = {
+  COST_TITLE: `Стоимость недвижимости`,
+  OFFER_TITLE: `Сумма ипотеки`,
+  CREDIT_PROPERTY: `ипотечные кредиты`,
+};
+
 const CostLimit = {
   MIN: 1_200_000,
   MAX: 25_000_000,
@@ -84,6 +90,9 @@ const CalculatorCreditMortage = (props) => {
         minAmount: MIN_AMOUNT,
         calculateAmount,
         calculatePercentRate,
+        costTitle: CustomString.COST_TITLE,
+        offerTitle: CustomString.OFFER_TITLE,
+        creditProperty: CustomString.CREDIT_PROPERTY,
       }}
       onApplicationCreate={onApplicationCreate}
     >

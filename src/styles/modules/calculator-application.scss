@@ -1,0 +1,5 @@
+.calculator-application__form {
+  &--invalid {
+    animation: shakeX 0.5s;
+  }
+}
