@@ -35,7 +35,7 @@ const Slider = () => {
           <p className="slider__slide-subtitle">Кредиты на любой случай</p>
           <ActionButton
             className="slider__slide-button"
-            href="#credit-calculator"
+            href="#calculator"
             inverted={true}
           >
             Рассчитать кредит

@@ -17,6 +17,7 @@
 .calculator-params__label {
   display: block;
 
+  padding-bottom: 9px;
   margin-top: 19px;
 
   font-size: 16px;
@@ -30,7 +31,7 @@
 
   overflow: visible;
 
-  margin-top: 9px;
+  margin: 0;
 
   &--invalid {
     .calculator-params__input-error {

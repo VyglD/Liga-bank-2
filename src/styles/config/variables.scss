@@ -28,6 +28,8 @@ $tablet: $desktop-breakpoint - 1px;
   --color-gray-2: #C1C2CA;
   --color-gray-3: #C4C4C4;
   --color-lightgray-0: #F6F7FF;
+  --color-lightgray-1: #E6F2FE;
+  --color-lightgray-2: #F2F8FF;
 }
 
 @media (min-width: $tablet-breakpoint) {

@@ -61,6 +61,7 @@
   &--two {
     background-image: url("../../images/slide2.webp");
     background-position-x: calc(50% - 70px);
+    background-color: var(--color-lightgray-2, lightgray);
 
     .slider__slide-subtitle {
       max-width: 150px;
@@ -70,6 +71,7 @@
   &--three {
     background-image: url("../../images/slide3.webp");
     background-position-x: calc(50% - 57px);
+    background-color: var(--color-lightgray-1, lightgray);
   }
 }
 

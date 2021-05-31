@@ -52,6 +52,7 @@ const Calculator = () => {
     <section
       ref={calculatorRef}
       className="calculator"
+      id="calculator"
     >
       <h2 className="calculator__title">Кредитный калькулятор</h2>
       <CalculatorTarget
