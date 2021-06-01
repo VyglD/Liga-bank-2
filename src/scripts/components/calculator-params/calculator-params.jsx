@@ -6,7 +6,7 @@ import CalculatorOffer from "../calculator-offer/calculator-offer";
 import {
   createFormatedValueString,
   getCleanDigit,
-  getFormatedDigitString
+  getFormatedDigitString,
 } from "../../utils";
 import {Postfix, Percentage} from "../../constants";
 import {limitType, stepType} from "../../types";
@@ -34,8 +34,8 @@ const CalculatorParams = (props) => {
 
   const [isCorrectCost, setCostStatus] = React.useState(true);
 
-  const minPayment = PaymentLimit.MIN * getCleanDigit(currentFormatedCostString);
-  const maxPayment = PaymentLimit.MAX * getCleanDigit(currentFormatedCostString);
+  const minPayment = Math.round(PaymentLimit.MIN * getCleanDigit(currentFormatedCostString));
+  const maxPayment = Math.round(PaymentLimit.MAX * getCleanDigit(currentFormatedCostString));
 
   const [
     currentFormatedPaymentString,
@@ -66,7 +66,11 @@ const CalculatorParams = (props) => {
 
   const formateRangePayment = React.useCallback(
       (value) => {
-        const newValue = Math.round(getCleanDigit(value) / maxPayment * Percentage.ENTIRE);
+        let newValue = 0;
+
+        if (maxPayment !== 0) {
+          newValue = Math.round(getCleanDigit(value) / maxPayment * Percentage.ENTIRE);
+        }
 
         return createFormatedValueString(newValue, Postfix.PERCENT);
       },

@@ -72,13 +72,7 @@ const createFormatedValueString = (value, postfix) => {
 };
 
 const toggleAnimateClass = (form, isValid, invalidClass) => {
-  if (isValid && (form.classList.contains(invalidClass))) {
-    form.classList.remove(invalidClass);
-  } else {
-    if (!form.classList.contains(invalidClass)) {
-      form.classList.add(invalidClass);
-    }
-  }
+  return isValid ? form.classList.remove(invalidClass) : form.classList.add(invalidClass);
 };
 
 export {

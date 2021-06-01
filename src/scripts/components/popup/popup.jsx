@@ -36,21 +36,17 @@ const Popup = (props) => {
       (evt) => {
         if (evt.key === Key.TAB) {
           const focusableElements = getFocusableElements(popupContentRef.current);
-          let indexElement = 0;
+          const indexElement = evt.shiftKey
+            ? getPreviousArrayIndex(
+                focusableElements.indexOf(document.activeElement),
+                focusableElements
+            )
+            : getNextArrayIndex(
+                focusableElements.indexOf(document.activeElement),
+                focusableElements
+            );
 
           evt.preventDefault();
-
-          if (evt.shiftKey) {
-            indexElement = getPreviousArrayIndex(
-                focusableElements.indexOf(document.activeElement),
-                focusableElements
-            );
-          } else {
-            indexElement = getNextArrayIndex(
-                focusableElements.indexOf(document.activeElement),
-                focusableElements
-            );
-          }
 
           focusableElements[indexElement].focus();
         }

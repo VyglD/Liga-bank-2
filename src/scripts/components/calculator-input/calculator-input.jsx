@@ -41,32 +41,33 @@ const CalculatorInput = (props) => {
   const inputWrapperRef = React.useRef();
   const inputRef = React.useRef();
 
+  const setInputValidity = React.useCallback(
+      (isValid) => {
+        onValidStatusChange(!isValid);
+
+        return isValid
+          ? inputWrapperRef.current.classList.add(CustomClass.WRAPPER_INVALID)
+          : inputWrapperRef.current.classList.remove(CustomClass.WRAPPER_INVALID);
+      },
+      [onValidStatusChange]
+  );
+
   const handleNewValue = React.useCallback(
       (newValue) => {
         const digitValue = getCleanDigit(newValue);
         const isLess = digitValue < minValue;
         const isBigger = digitValue > maxValue;
-        const isInaccurate = !(strict || minStrict || maxStrict);
+        const isStrict = !(strict || minStrict || maxStrict) && (isLess || isBigger);
 
-        if (isInaccurate && (isLess || isBigger)) {
-          if (!inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
-            inputWrapperRef.current.classList.add(CustomClass.WRAPPER_INVALID);
-
-            onValidStatusChange(false);
-          }
-
-          if (digitValue < 0) {
-            return 0;
-          }
-        } else if (inputWrapperRef.current.classList.contains(CustomClass.WRAPPER_INVALID)) {
-          inputWrapperRef.current.classList.remove(CustomClass.WRAPPER_INVALID);
-
-          onValidStatusChange(true);
+        if (digitValue < 0) {
+          return 0;
         }
+
+        setInputValidity(isStrict);
 
         return newValue;
       },
-      [strict, minStrict, maxStrict, minValue, maxValue, onValidStatusChange]
+      [strict, minStrict, maxStrict, minValue, maxValue, setInputValidity]
   );
 
   const handleIncrease = React.useCallback(

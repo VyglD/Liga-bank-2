@@ -51,13 +51,10 @@ const Services = () => {
 
   const setScrolling = React.useCallback(
       () => {
-        if (window.innerWidth < Breakpoint.DESKTOP) {
-          changeScrollingStatus(true);
-          setDotsVisibility(true);
-        } else {
-          changeScrollingStatus(false);
-          setDotsVisibility(false);
-        }
+        const isMobileMode = window.innerWidth < Breakpoint.DESKTOP;
+
+        changeScrollingStatus(isMobileMode);
+        setDotsVisibility(isMobileMode);
       },
       []
   );

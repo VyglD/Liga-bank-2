@@ -1,21 +1,28 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CalculatorInput from "../calculator-input/calculator-input";
-import {createFormatedValueString, getCleanDigit} from "../../utils";
+import {
+  createFormatedValueString,
+  getCleanDigit,
+} from "../../utils";
 import {Percentage, Key} from "../../constants";
 
 const RANGE_OFFSET = `--line-progress`;
 
 const applyOffsetBorders = (offset) => {
-  if (offset < Percentage.NULL) {
-    offset = Percentage.NULL;
-  }
-
-  if (offset > Percentage.ENTIRE) {
-    offset = Percentage.ENTIRE;
+  if (typeof offset !== `number` || offset < Percentage.NULL) {
+    return Percentage.NULL;
+  } else if (offset > Percentage.ENTIRE) {
+    return Percentage.ENTIRE;
   }
 
   return offset;
+};
+
+const calculateFraction = (maxValue, minValue) => {
+  return (maxValue - minValue) === 0
+    ? 0
+    : Percentage.ENTIRE / (maxValue - minValue);
 };
 
 const CalculatorRange = (props) => {
@@ -33,7 +40,7 @@ const CalculatorRange = (props) => {
 
   const rangeRef = React.useRef();
 
-  const fraction = Percentage.ENTIRE / (maxValue - minValue);
+  const fraction = calculateFraction(maxValue, minValue);
 
   const setOffset = React.useCallback(
       (offset) => {
@@ -158,13 +165,9 @@ const CalculatorRange = (props) => {
 
         if (isLeft || isRight) {
           const step = Math.max(fraction, stepRange);
-          let offset = currentOffset.current;
-
-          if (isLeft) {
-            offset = offset - step;
-          } else if (isRight) {
-            offset = offset + step;
-          }
+          const offset = isLeft
+            ? currentOffset.current - step
+            : currentOffset.current + step;
 
           setNewRangeValue(applyOffsetBorders(offset));
         }

@@ -43,12 +43,14 @@ const Departments = () => {
   const changeMapState = React.useCallback(
       () => {
         if (window.innerWidth < Breakpoint.TABLET) {
-          setMapState(MapProps.MOBILE);
-        } else if (window.innerWidth >= Breakpoint.DESKTOP) {
-          setMapState(MapProps.DESKTOP);
-        } else {
-          setMapState(MapProps.TABLET);
+          return setMapState(MapProps.MOBILE);
         }
+
+        if (window.innerWidth >= Breakpoint.DESKTOP) {
+          return setMapState(MapProps.DESKTOP);
+        }
+
+        return setMapState(MapProps.TABLET);
       },
       []
   );

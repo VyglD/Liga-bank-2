@@ -70,16 +70,16 @@ const LoginForm = (props) => {
         const value = input.value.trim();
         input.value = value;
 
-        if (value) {
-          if (input.classList.contains(InvalidClass.INPUT)) {
-            input.classList.remove(InvalidClass.INPUT);
-            input.placeholder = ``;
-          }
-        } else {
+        if (!value) {
           input.classList.add(InvalidClass.INPUT);
           input.placeholder = `Заполните поле`;
 
           return false;
+        }
+
+        if (input.classList.contains(InvalidClass.INPUT)) {
+          input.classList.remove(InvalidClass.INPUT);
+          input.placeholder = ``;
         }
 
         return true;
@@ -104,10 +104,7 @@ const LoginForm = (props) => {
 
         toggleAnimateClass(formContainerRef.current, isFormValid, InvalidClass.CONTAINER_FORM);
 
-        if (
-          checkInputValue(loginInputRef.current)
-          & checkInputValue(passwordInputRef.current)
-        ) {
+        if (isFormValid) {
           localStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify(getAuthData()));
 
           onCloseButtonClick(evt);

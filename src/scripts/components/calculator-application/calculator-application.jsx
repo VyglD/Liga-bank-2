@@ -155,6 +155,7 @@ const CalculatorApplication = (props) => {
         isFormValid = validateEmailField() && isFormValid;
 
         toggleAnimateClass(formRef.current, isFormValid, CustomClass.INVALID_FORM);
+        isSending.current = !isFormValid;
 
         if (isFormValid) {
           const applicationData = {
@@ -167,12 +168,6 @@ const CalculatorApplication = (props) => {
           setApplicationData(applicationData);
 
           onApplicationSubmit();
-        } else {
-          isSending.current = true;
-
-          if (!formRef.current.classList.contains(CustomClass.INVALID_FORM)) {
-            formRef.current.classList.add(CustomClass.INVALID_FORM);
-          }
         }
       },
       [
