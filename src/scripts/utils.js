@@ -1,21 +1,9 @@
-import {FOCUS_ELEMENTS, Key, REGEX_DIGITS} from "./constants";
+import {FOCUS_ELEMENTS, REGEX_DIGITS} from "./constants";
 
 const getFocusableElements = (container) => {
   return Array.from(
       container.querySelectorAll(FOCUS_ELEMENTS)
   );
-};
-
-const isEscKeyDown = (evt) => {
-  return evt.key === Key.ESC;
-};
-
-const isLeftKey = (evt) => {
-  return evt.code === Key.LEFT;
-};
-
-const isRightKey = (evt) => {
-  return evt.code === Key.RIGHT;
 };
 
 const getNextArrayIndex = (currentIndex, arr) => {
@@ -95,9 +83,6 @@ const toggleAnimateClass = (form, isValid, invalidClass) => {
 
 export {
   getFocusableElements,
-  isEscKeyDown,
-  isLeftKey,
-  isRightKey,
   getNextArrayIndex,
   getPreviousArrayIndex,
   animate,

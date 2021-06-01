@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import {
   getFocusableElements,
-  isEscKeyDown,
   getNextArrayIndex,
   getPreviousArrayIndex,
 } from "../../utils";
@@ -70,7 +69,7 @@ const Popup = (props) => {
 
   const handleEscKeyDown = React.useCallback(
       (evt) => {
-        if (isEscKeyDown(evt)) {
+        if (evt.key === Key.ESC) {
           onCloseButtonClick(evt);
         }
       },

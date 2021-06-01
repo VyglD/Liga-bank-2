@@ -1,13 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CalculatorInput from "../calculator-input/calculator-input";
-import {
-  createFormatedValueString,
-  getCleanDigit,
-  isLeftKey,
-  isRightKey,
-} from "../../utils";
-import {Percentage} from "../../constants";
+import {createFormatedValueString, getCleanDigit} from "../../utils";
+import {Percentage, Key} from "../../constants";
 
 const RANGE_OFFSET = `--line-progress`;
 
@@ -158,19 +153,23 @@ const CalculatorRange = (props) => {
 
   const handleArrowDown = React.useCallback(
       (downEvt) => {
-        if (isLeftKey(downEvt) || isRightKey(downEvt)) {
+        const isLeft = downEvt.key === Key.LEFT;
+        const isRight = downEvt.key === Key.RIGHT;
+
+        if (isLeft || isRight) {
+          const step = Math.max(fraction, stepRange);
           let offset = currentOffset.current;
 
-          if (isLeftKey(downEvt)) {
-            offset = offset - fraction;
-          } else if (isRightKey(downEvt)) {
-            offset = offset + fraction;
+          if (isLeft) {
+            offset = offset - step;
+          } else if (isRight) {
+            offset = offset + step;
           }
 
           setNewRangeValue(applyOffsetBorders(offset));
         }
       },
-      [setNewRangeValue, fraction]
+      [setNewRangeValue, stepRange, fraction]
   );
 
   React.useEffect(
