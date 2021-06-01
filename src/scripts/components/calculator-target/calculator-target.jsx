@@ -77,7 +77,10 @@ const CalculatorTarget = (props) => {
 
 CalculatorTarget.propTypes = {
   className: PropTypes.string,
-  CreditType: PropTypes.shape().isRequired,
+  CreditType: PropTypes.exact({
+    MORTAGE: PropTypes.string.isRequired,
+    AUTO: PropTypes.string.isRequired,
+  }).isRequired,
   onSelectItemClick: PropTypes.func.isRequired,
 };
 
