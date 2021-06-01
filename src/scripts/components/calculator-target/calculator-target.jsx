@@ -4,34 +4,34 @@ import PropTypes from "prop-types";
 const SELECT_BUTTON_WRAPPER_CLASS = `calculator-target__select-button-wrapper`;
 
 const CustomClass = {
-  SELECT_BUTTON_WRAPPER: SELECT_BUTTON_WRAPPER_CLASS,
-  SELECT_BUTTON_WRAPPER_OPEN: `${SELECT_BUTTON_WRAPPER_CLASS}--open`,
+  DEFAULT: SELECT_BUTTON_WRAPPER_CLASS,
+  OPEN: `${SELECT_BUTTON_WRAPPER_CLASS}--open`,
 };
 
 const CalculatorTarget = (props) => {
   const {className = ``, CreditType, onSelectItemClick} = props;
 
-  const selectButtonWrapperRef = React.useRef();
-  const selectButtonRef = React.useRef();
+  const [currentType, setCurrentType] = React.useState(`Выберите цель кредита`);
+  const [selectButtonWrapperClass, setSelectButtonWrapperClass] = React.useState(CustomClass.DEFAULT);
 
   const handleSelectButtonClick = React.useCallback(
       () => {
-        selectButtonWrapperRef.current.classList
-          .toggle(CustomClass.SELECT_BUTTON_WRAPPER_OPEN);
+        setSelectButtonWrapperClass((currentClass) => {
+          return currentClass === CustomClass.DEFAULT
+            ? `${CustomClass.DEFAULT} ${CustomClass.OPEN}`
+            : CustomClass.DEFAULT;
+        });
       },
       []
   );
 
   const handleSelectItemClick = React.useCallback(
       ({target}) => {
-        const selecedtType = target.dataset.type;
+        const selectedType = target.dataset.type;
 
-        selectButtonRef.current.innerText = selecedtType;
-
-        selectButtonWrapperRef.current.classList
-          .remove(CustomClass.SELECT_BUTTON_WRAPPER_OPEN);
-
-        onSelectItemClick(selecedtType);
+        setSelectButtonWrapperClass(CustomClass.DEFAULT);
+        setCurrentType(selectedType);
+        onSelectItemClick(selectedType);
       },
       [onSelectItemClick]
   );
@@ -40,15 +40,13 @@ const CalculatorTarget = (props) => {
     <div className={`${className} calculator-target`}>
       <h3 className="calculator-target__title">Шаг 1. Цель кредита</h3>
       <div
-        ref={selectButtonWrapperRef}
-        className={CustomClass.SELECT_BUTTON_WRAPPER}
+        className={selectButtonWrapperClass}
       >
         <button
-          ref={selectButtonRef}
           className="calculator-target__select-button"
           onClick={handleSelectButtonClick}
         >
-          Выберите цель кредита
+          {currentType}
         </button>
         <ul className="calculator-target__select-list">
           <li className="calculator-target__select-item-wrapper">

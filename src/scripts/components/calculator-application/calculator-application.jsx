@@ -12,7 +12,10 @@ const FIRST_APPLICATION_NUMBER = `0010`;
 const CustomClass = {
   INVALID_FORM: `calculator-application__form--invalid`,
   DISPLAY_ERROR: `calculator-application__input-error--display`,
+  DEFAULT_ERROR: `calculator-application__input-error`,
 };
+
+const FULL_ERROR_CLASS = `${CustomClass.DEFAULT_ERROR} ${CustomClass.DISPLAY_ERROR}`;
 
 const Regex = {
   PHONE: /^((8|([+]?7))([-]| )?)?([(]?[0-9]{3}[)]?([-]| )?)([0-9]|[-]| ){7,10}$/u,
@@ -20,9 +23,10 @@ const Regex = {
 };
 
 const ErrorMessage = {
-  EMPTY: `Обязательно для заполнения`,
+  REQUIRED: `Обязательно для заполнения`,
   PHONE: `Неверный формат номера`,
   EMAIL: `Неверный формат email адреса`,
+  NONE: ``,
 };
 
 const getApplicationData = () => {
@@ -68,45 +72,35 @@ const CalculatorApplication = (props) => {
   const phoneErrorRef = React.useRef();
   const emailErrorRef = React.useRef();
 
+  const [nameInputClass, setNameInputClass] = React.useState(CustomClass.DEFAULT_ERROR);
+  const [phoneInputClass, setPhoneInputClass] = React.useState(CustomClass.DEFAULT_ERROR);
+  const [emailInputClass, setEmailInputClass] = React.useState(CustomClass.DEFAULT_ERROR);
+
+  const [nameErrorMessage, setNameErrorMessage] = React.useState(ErrorMessage.NONE);
+  const [phoneErrorMessage, setPhoneErrorMessage] = React.useState(ErrorMessage.NONE);
+  const [emailErrorMessage, setEmailErrorMessage] = React.useState(ErrorMessage.NONE);
+
   const [nameValue, setNameValue] = React.useState(name);
   const [phoneValue, setPhoneValue] = React.useState(phone);
   const [emailValue, setEmailValue] = React.useState(email);
-
-  const setError = React.useCallback(
-      (node, errorMessage) => {
-        node.innerText = errorMessage;
-
-        if (!node.classList.contains(CustomClass.DISPLAY_ERROR)) {
-          node.classList.add(CustomClass.DISPLAY_ERROR);
-        }
-      },
-      []
-  );
-
-  const hideError = React.useCallback(
-      (node) => {
-        node.innerText = ``;
-
-        if (node.classList.contains(CustomClass.DISPLAY_ERROR)) {
-          node.classList.remove(CustomClass.DISPLAY_ERROR);
-        }
-      },
-      []
-  );
 
   const validateNameField = React.useCallback(
       () => {
         const value = nameRef.current.value;
 
         if (isEmpty(value)) {
-          setError(nameErrorRef.current, ErrorMessage.EMPTY);
+          setNameInputClass(FULL_ERROR_CLASS);
+          setNameErrorMessage(ErrorMessage.REQUIRED);
+
           return false;
         }
 
-        hideError(nameErrorRef.current);
+        setNameInputClass(CustomClass.DEFAULT_ERROR);
+        setNameErrorMessage(ErrorMessage.NONE);
+
         return true;
       },
-      [setError, hideError]
+      []
   );
 
   const validatePhoneField = React.useCallback(
@@ -114,17 +108,25 @@ const CalculatorApplication = (props) => {
         const value = phoneRef.current.value;
 
         if (isEmpty(value)) {
-          setError(phoneErrorRef.current, ErrorMessage.EMPTY);
-          return false;
-        } else if (!Regex.PHONE.test(String(value).toLowerCase())) {
-          setError(phoneErrorRef.current, ErrorMessage.PHONE);
+          setPhoneInputClass(FULL_ERROR_CLASS);
+          setPhoneErrorMessage(ErrorMessage.REQUIRED);
+
           return false;
         }
 
-        hideError(phoneErrorRef.current);
+        if (!Regex.PHONE.test(String(value).toLowerCase())) {
+          setPhoneInputClass(FULL_ERROR_CLASS);
+          setPhoneErrorMessage(ErrorMessage.PHONE);
+
+          return false;
+        }
+
+        setPhoneInputClass(CustomClass.DEFAULT_ERROR);
+        setPhoneErrorMessage(ErrorMessage.NONE);
+
         return true;
       },
-      [setError, hideError]
+      []
   );
 
   const validateEmailField = React.useCallback(
@@ -132,17 +134,25 @@ const CalculatorApplication = (props) => {
         const value = emailRef.current.value;
 
         if (isEmpty(value)) {
-          setError(emailErrorRef.current, ErrorMessage.EMPTY);
-          return false;
-        } else if (!Regex.EMAIL.test(String(value).toLowerCase())) {
-          setError(emailErrorRef.current, ErrorMessage.EMAIL);
+          setEmailInputClass(FULL_ERROR_CLASS);
+          setEmailErrorMessage(ErrorMessage.REQUIRED);
+
           return false;
         }
 
-        hideError(emailErrorRef.current);
+        if (!Regex.EMAIL.test(String(value).toLowerCase())) {
+          setEmailInputClass(FULL_ERROR_CLASS);
+          setEmailErrorMessage(ErrorMessage.EMAIL);
+
+          return false;
+        }
+
+        setEmailInputClass(CustomClass.DEFAULT_ERROR);
+        setEmailErrorMessage(ErrorMessage.NONE);
+
         return true;
       },
-      [setError, hideError]
+      []
   );
 
   const handleFormSubmit = React.useCallback(
@@ -286,8 +296,9 @@ const CalculatorApplication = (props) => {
         <div className="calculator-application__input-wrapper">
           <p
             ref={nameErrorRef}
-            className="calculator-application__input-error"
+            className={nameInputClass}
           >
+            {nameErrorMessage}
           </p>
           <input
             ref={nameRef}
@@ -305,8 +316,9 @@ const CalculatorApplication = (props) => {
         >
           <p
             ref={phoneErrorRef}
-            className="calculator-application__input-error"
+            className={phoneInputClass}
           >
+            {phoneErrorMessage}
           </p>
           <input
             ref={phoneRef}
@@ -324,8 +336,9 @@ const CalculatorApplication = (props) => {
         >
           <p
             ref={emailErrorRef}
-            className="calculator-application__input-error"
+            className={emailInputClass}
           >
+            {emailErrorMessage}
           </p>
           <input
             ref={emailRef}
