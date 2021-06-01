@@ -38,19 +38,9 @@ const CalculatorInput = (props) => {
     onValidStatusChange,
   } = props;
 
-  const inputWrapperRef = React.useRef();
+  const [inputWrapperClass, setInputWrapperClass] = React.useState(CustomClass.WRAPPER);
+
   const inputRef = React.useRef();
-
-  const setInputValidity = React.useCallback(
-      (isValid) => {
-        onValidStatusChange(!isValid);
-
-        return isValid
-          ? inputWrapperRef.current.classList.add(CustomClass.WRAPPER_INVALID)
-          : inputWrapperRef.current.classList.remove(CustomClass.WRAPPER_INVALID);
-      },
-      [onValidStatusChange]
-  );
 
   const handleNewValue = React.useCallback(
       (newValue) => {
@@ -63,11 +53,12 @@ const CalculatorInput = (props) => {
           return 0;
         }
 
-        setInputValidity(isStrict);
+        onValidStatusChange(!isStrict);
+        setInputWrapperClass(isStrict ? `${CustomClass.WRAPPER} ${CustomClass.WRAPPER_INVALID}` : CustomClass.WRAPPER);
 
         return newValue;
       },
-      [strict, minStrict, maxStrict, minValue, maxValue, setInputValidity]
+      [strict, minStrict, maxStrict, minValue, maxValue, onValidStatusChange]
   );
 
   const handleIncrease = React.useCallback(
@@ -158,8 +149,7 @@ const CalculatorInput = (props) => {
         )
       }
       <div
-        ref={inputWrapperRef}
-        className={CustomClass.WRAPPER}
+        className={inputWrapperClass}
       >
         {
           controls && (

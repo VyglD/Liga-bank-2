@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ActionButton from "../action-button/action-button";
-import {toggleAnimateClass} from "../../utils";
 import {STORAGE_KEY} from "../../constants";
 
 import logo from "../../../images/logo-expanded.svg";
@@ -13,26 +12,44 @@ const PasswordStatus = {
 
 const STORAGE_AUTH_KEY = `${STORAGE_KEY}-auth`;
 
-const InvalidClass = {
-  INPUT: `login-form__field-input--invalid`,
-  CONTAINER_FORM: `login-form--invalid`,
+const CustomClass = {
+  INPUT_DEFAULT: `login-form__field-input`,
+  INPUT_INVALID: `login-form__field-input--invalid`,
+  FORM_DEFAULT: `login-form`,
+  FORM_INVALID: `login-form--invalid`,
+};
+
+const FullClass = {
+  FORM_INVALID: `${CustomClass.FORM_DEFAULT} ${CustomClass.FORM_INVALID}`,
+  INPUT_INVALID: `${CustomClass.INPUT_DEFAULT} ${CustomClass.INPUT_INVALID}`,
+};
+
+const InputPlaceholder = {
+  VALID: ``,
+  ERROR: `Заполните поле`,
 };
 
 const LoginForm = (props) => {
   const {onCloseButtonClick = () => {}} = props;
 
-  const formContainerRef = React.useRef();
+  const [formClass, setFormClass] = React.useState(CustomClass.FORM_DEFAULT);
 
-  const loginInputRef = React.useRef();
-  const passwordInputRef = React.useRef();
+  const [nameInputPlaceholder, setNameInputPlaceholder] = React.useState(InputPlaceholder.VALID);
+  const [passwordInputPlaceholder, setPasswordInputPlaceholder] = React.useState(InputPlaceholder.VALID);
+
+  const [nameInputValue, setNameInputValue] = React.useState(``);
+  const [passwordInputValue, setPasswordInputValue] = React.useState(``);
+
+  const [nameInputClass, setNameInputClass] = React.useState(CustomClass.INPUT_DEFAULT);
+  const [passwordInputClass, setPasswordInputClass] = React.useState(CustomClass.INPUT_DEFAULT);
 
   React.useEffect(
       () => {
         const authData = JSON.parse(localStorage.getItem(STORAGE_AUTH_KEY));
 
         if (authData) {
-          loginInputRef.current.value = authData.login;
-          passwordInputRef.current.value = authData.password;
+          setNameInputValue(authData.login ? authData.login : ``);
+          setPasswordInputValue(authData.password ? authData.password : ``);
         }
       },
       []
@@ -56,42 +73,46 @@ const LoginForm = (props) => {
   );
 
   const getAuthData = React.useCallback(
-      () => {
-        const login = loginInputRef.current.value;
-        const password = passwordInputRef.current.value;
-
-        return {login, password};
-      },
-      []
+      () => ({login: nameInputValue, password: passwordInputValue}),
+      [nameInputValue, passwordInputValue]
   );
 
-  const checkInputValue = React.useCallback(
-      (input) => {
-        const value = input.value.trim();
-        input.value = value;
+  const checkNameInputValue = React.useCallback(
+      () => {
+        const clearValue = nameInputValue.trim();
 
-        if (!value) {
-          input.classList.add(InvalidClass.INPUT);
-          input.placeholder = `Заполните поле`;
+        if (!clearValue) {
+          setNameInputPlaceholder(InputPlaceholder.ERROR);
+          setNameInputClass(FullClass.INPUT_INVALID);
 
           return false;
         }
 
-        if (input.classList.contains(InvalidClass.INPUT)) {
-          input.classList.remove(InvalidClass.INPUT);
-          input.placeholder = ``;
-        }
+        setNameInputPlaceholder(InputPlaceholder.VALID);
+        setNameInputClass(CustomClass.INPUT_DEFAULT);
 
         return true;
       },
-      []
+      [nameInputValue]
   );
 
-  const handleFieldInput = React.useCallback(
-      (evt) => {
-        checkInputValue(evt.target);
+  const checkPasswordInputValue = React.useCallback(
+      () => {
+        const clearValue = passwordInputValue.trim();
+
+        if (!clearValue) {
+          setPasswordInputPlaceholder(InputPlaceholder.ERROR);
+          setPasswordInputClass(FullClass.INPUT_INVALID);
+
+          return false;
+        }
+
+        setPasswordInputPlaceholder(InputPlaceholder.VALID);
+        setPasswordInputClass(CustomClass.INPUT_DEFAULT);
+
+        return true;
       },
-      [checkInputValue]
+      [passwordInputValue]
   );
 
   const saveAuthData = React.useCallback(
@@ -99,10 +120,10 @@ const LoginForm = (props) => {
         evt.preventDefault();
 
         let isFormValid = true;
-        isFormValid = checkInputValue(loginInputRef.current) && isFormValid;
-        isFormValid = checkInputValue(passwordInputRef.current) && isFormValid;
+        isFormValid = checkNameInputValue() && isFormValid;
+        isFormValid = checkPasswordInputValue() && isFormValid;
 
-        toggleAnimateClass(formContainerRef.current, isFormValid, InvalidClass.CONTAINER_FORM);
+        setFormClass(isFormValid ? CustomClass.FORM_DEFAULT : FullClass.FORM_INVALID);
 
         if (isFormValid) {
           localStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify(getAuthData()));
@@ -110,14 +131,29 @@ const LoginForm = (props) => {
           onCloseButtonClick(evt);
         }
       },
-      [checkInputValue, getAuthData, onCloseButtonClick]
+      [checkNameInputValue, checkPasswordInputValue, getAuthData, onCloseButtonClick]
+  );
+
+  const handleNameValueInput = React.useCallback(
+      ({target}) => {
+        setNameInputValue(target.value);
+        checkNameInputValue();
+      },
+      [checkNameInputValue]
+  );
+
+  const handlePasswodValueInput = React.useCallback(
+      ({target}) => {
+        setPasswordInputValue(target.value);
+        checkPasswordInputValue();
+      },
+      [checkPasswordInputValue]
   );
 
   return (
     <div
-      ref={formContainerRef}
-      className="login-form"
-      onAnimationEnd={() => toggleAnimateClass(formContainerRef.current, true, InvalidClass.CONTAINER_FORM)}
+      className={formClass}
+      onAnimationEnd={() => setFormClass(CustomClass.FORM_DEFAULT)}
     >
       <img
         className="login-form__logo"
@@ -143,11 +179,12 @@ const LoginForm = (props) => {
             Логин
           </label>
           <input
-            ref={loginInputRef}
-            className="login-form__field-input"
+            className={nameInputClass}
             type="text"
             id="login-form-field-login"
-            onInput={handleFieldInput}
+            value={nameInputValue}
+            onInput={handleNameValueInput}
+            placeholder={nameInputPlaceholder}
             required
           />
         </div>
@@ -160,11 +197,12 @@ const LoginForm = (props) => {
           </label>
           <div className="login-form__field-input-wrapper">
             <input
-              ref={passwordInputRef}
-              className="login-form__field-input login-form__field-input--password"
+              className={passwordInputClass}
               type={passwordStatus}
               id="login-form-field-password"
-              onInput={handleFieldInput}
+              value={passwordInputValue}
+              onInput={handlePasswodValueInput}
+              placeholder={passwordInputPlaceholder}
               required
             />
             <button

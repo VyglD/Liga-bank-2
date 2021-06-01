@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Inputmask from "inputmask";
 import ActionButton from "../action-button/action-button";
-import {getCleanDigit, toggleAnimateClass} from "../../utils";
+import {getCleanDigit} from "../../utils";
 import {STORAGE_KEY} from "../../constants";
 
 const STORAGE_APPLICATION_KEY = `${STORAGE_KEY}-application`;
@@ -10,12 +10,16 @@ const STORAGE_APPLICATION_KEY = `${STORAGE_KEY}-application`;
 const FIRST_APPLICATION_NUMBER = `0010`;
 
 const CustomClass = {
+  DEFAULT_FORM: `calculator-application__form`,
   INVALID_FORM: `calculator-application__form--invalid`,
   DISPLAY_ERROR: `calculator-application__input-error--display`,
   DEFAULT_ERROR: `calculator-application__input-error`,
 };
 
-const FULL_ERROR_CLASS = `${CustomClass.DEFAULT_ERROR} ${CustomClass.DISPLAY_ERROR}`;
+const FullClass = {
+  ERROR_MESSAGE: `${CustomClass.DEFAULT_ERROR} ${CustomClass.DISPLAY_ERROR}`,
+  INVALID_FORM: `${CustomClass.DEFAULT_FORM} ${CustomClass.INVALID_FORM}`,
+};
 
 const Regex = {
   PHONE: /^((8|([+]?7))([-]| )?)?([(]?[0-9]{3}[)]?([-]| )?)([0-9]|[-]| ){7,10}$/u,
@@ -62,8 +66,6 @@ const CalculatorApplication = (props) => {
 
   const isSending = React.useRef(false);
 
-  const formRef = React.useRef();
-
   const nameRef = React.useRef();
   const phoneRef = React.useRef();
   const emailRef = React.useRef();
@@ -84,12 +86,14 @@ const CalculatorApplication = (props) => {
   const [phoneValue, setPhoneValue] = React.useState(phone);
   const [emailValue, setEmailValue] = React.useState(email);
 
+  const [formClass, setFormClass] = React.useState(CustomClass.DEFAULT_FORM);
+
   const validateNameField = React.useCallback(
       () => {
         const value = nameRef.current.value;
 
         if (isEmpty(value)) {
-          setNameInputClass(FULL_ERROR_CLASS);
+          setNameInputClass(FullClass.ERROR_MESSAGE);
           setNameErrorMessage(ErrorMessage.REQUIRED);
 
           return false;
@@ -108,14 +112,14 @@ const CalculatorApplication = (props) => {
         const value = phoneRef.current.value;
 
         if (isEmpty(value)) {
-          setPhoneInputClass(FULL_ERROR_CLASS);
+          setPhoneInputClass(FullClass.ERROR_MESSAGE);
           setPhoneErrorMessage(ErrorMessage.REQUIRED);
 
           return false;
         }
 
         if (!Regex.PHONE.test(String(value).toLowerCase())) {
-          setPhoneInputClass(FULL_ERROR_CLASS);
+          setPhoneInputClass(FullClass.ERROR_MESSAGE);
           setPhoneErrorMessage(ErrorMessage.PHONE);
 
           return false;
@@ -134,14 +138,14 @@ const CalculatorApplication = (props) => {
         const value = emailRef.current.value;
 
         if (isEmpty(value)) {
-          setEmailInputClass(FULL_ERROR_CLASS);
+          setEmailInputClass(FullClass.ERROR_MESSAGE);
           setEmailErrorMessage(ErrorMessage.REQUIRED);
 
           return false;
         }
 
         if (!Regex.EMAIL.test(String(value).toLowerCase())) {
-          setEmailInputClass(FULL_ERROR_CLASS);
+          setEmailInputClass(FullClass.ERROR_MESSAGE);
           setEmailErrorMessage(ErrorMessage.EMAIL);
 
           return false;
@@ -164,7 +168,7 @@ const CalculatorApplication = (props) => {
         isFormValid = validatePhoneField() && isFormValid;
         isFormValid = validateEmailField() && isFormValid;
 
-        toggleAnimateClass(formRef.current, isFormValid, CustomClass.INVALID_FORM);
+        setFormClass(isFormValid ? CustomClass.DEFAULT_FORM : FullClass.INVALID_FORM);
         isSending.current = !isFormValid;
 
         if (isFormValid) {
@@ -286,12 +290,11 @@ const CalculatorApplication = (props) => {
         </li>
       </ul>
       <form
-        ref={formRef}
-        className="calculator-application__form"
+        className={formClass}
         action=""
         method="post"
         onSubmit={handleFormSubmit}
-        onAnimationEnd={() => toggleAnimateClass(formRef.current, true, CustomClass.INVALID_FORM)}
+        onAnimationEnd={() => setFormClass(CustomClass.DEFAULT_FORM)}
       >
         <div className="calculator-application__input-wrapper">
           <p

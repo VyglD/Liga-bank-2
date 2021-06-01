@@ -71,10 +71,6 @@ const createFormatedValueString = (value, postfix) => {
   return `${getFormatedDigitString(value)}${postfix}`;
 };
 
-const toggleAnimateClass = (form, isValid, invalidClass) => {
-  return isValid ? form.classList.remove(invalidClass) : form.classList.add(invalidClass);
-};
-
 export {
   getFocusableElements,
   getNextArrayIndex,
@@ -84,5 +80,4 @@ export {
   getCleanDigit,
   getFormatedDigitString,
   createFormatedValueString,
-  toggleAnimateClass,
 };

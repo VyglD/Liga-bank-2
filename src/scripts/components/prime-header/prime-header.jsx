@@ -4,17 +4,25 @@ import LoginForm from "../login-form/login-form";
 
 import logo from "../../../images/logo.svg";
 
-const OPENED_CLASS = `prime-header__content--opened`;
+const CustomClass = {
+  OPEN: `prime-header__content--opened`,
+  DEFAULT: `prime-header__content`,
+};
 
 const PrimeHeader = () => {
-  const primeHeaderContentRef = React.useRef();
+  const [contentClass, setContentClass] = React.useState(CustomClass.DEFAULT);
+
   const [isPopupOpen, setPopupStatus] = React.useState(false);
 
   const handleToggleButtonClick = React.useCallback(
       (evt) => {
         evt.preventDefault();
 
-        primeHeaderContentRef.current.classList.toggle(OPENED_CLASS);
+        setContentClass((currentClass) => {
+          return currentClass === CustomClass.DEFAULT
+            ? `${CustomClass.DEFAULT} ${CustomClass.OPEN}`
+            : CustomClass.DEFAULT;
+        });
       },
       []
   );
@@ -23,7 +31,7 @@ const PrimeHeader = () => {
       (evt) => {
         evt.preventDefault();
 
-        primeHeaderContentRef.current.classList.remove(OPENED_CLASS);
+        setContentClass(CustomClass.DEFAULT);
       },
       []
   );
@@ -40,8 +48,7 @@ const PrimeHeader = () => {
   return (
     <header className="prime-header">
       <div
-        ref={primeHeaderContentRef}
-        className="prime-header__content"
+        className={contentClass}
       >
         <button
           className="prime-header__toggle-button"
