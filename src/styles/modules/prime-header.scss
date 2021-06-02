@@ -166,12 +166,18 @@
 }
 
 @media (max-width: $mobile) {
-  .prime-header__content {
-    padding-top: 11px;
-    padding-bottom: 11px;
+  .prime-header {
+    &--open {
+      position: fixed;
+      z-index: 9999;
 
-    &--opened {
-      flex-wrap: wrap;
+      overflow-y: scroll;
+
+      height: 100vh;
+
+      .prime-header__content {
+        flex-wrap: wrap;
+      }
 
       .prime-header__nav {
         position: relative;
@@ -193,7 +199,7 @@
         box-sizing: content-box;
         padding: var(--button-offset);
         margin-top: -17px;
-        margin-right: -26px;
+        margin-right: -14px;
         margin-left: auto;
 
         background-color: transparent;
@@ -229,10 +235,19 @@
         background-color: var(--color-gray-0, gray);
       }
 
+      .prime-header__nav-list-link {
+        width: calc(100% + 2 * var(--padding));
+        margin-left: calc(-1 * var(--padding));
+        padding-left: calc(2 * var(--padding));
+      }
+
       .prime-header__login {
-        width: 100%;
+        width: calc(100% + 2 * var(--padding));
         padding: 0;
+        padding-left: var(--padding);
         margin: 0;
+        margin-left: calc(-1 * var(--padding));
+        margin-right: calc(-1 * var(--padding));
 
         &::before {
           width: 18px;
@@ -248,14 +263,40 @@
           padding: 18px 0;
           margin: 0;
         }
+
+        &::after {
+          width: calc(100% - var(--padding));
+        }
+      }
+
+      .prime-header__login:not(:disabled) {
+        &:hover {
+          background-color: var(--color-gray-0, gray);
+
+          box-shadow: 0 0 0 1px var(--color-gray-0, gray);
+
+          span {
+            transform: none;
+          }
+        }
       }
     }
   }
 
+  .prime-header__content {
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+
   .prime-header__toggle-button:not(:disabled),
-  .prime-header__nav-close-button:not(:disabled) {
+  .prime-header__nav-close-button:not(:disabled),
+  .prime-header__nav-list-link:not(:disabled)[href] {
     &:hover {
       background-color: var(--color-gray-0, gray);
+
+      box-shadow: 0 0 0 1px var(--color-gray-0, gray);
+
+      transform: none;
     }
 
     &:focus {
@@ -318,13 +359,15 @@
 
   .prime-header__nav {
     display: none;
+
+    padding: 0;
   }
 
   .prime-header__nav-list {
     flex-direction: column;
     flex-wrap: nowrap;
 
-    margin-top: 38px;
+    margin-top: 33px;
   }
 
   .prime-header__nav-list-link {

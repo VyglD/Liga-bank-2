@@ -253,6 +253,7 @@
 
   .services__tabs {
     display: flex;
+    flex-wrap: wrap;
   }
 
   .services__tab-item {

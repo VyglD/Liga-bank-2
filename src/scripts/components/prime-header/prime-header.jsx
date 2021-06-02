@@ -1,16 +1,17 @@
 import React from "react";
 import Popup from "../popup/popup";
 import LoginForm from "../login-form/login-form";
+import {hidePageScrollbar, displayPageScrollbar} from "../../utils";
 
 import logo from "../../../images/logo.svg";
 
 const CustomClass = {
-  OPEN: `prime-header__content--opened`,
-  DEFAULT: `prime-header__content`,
+  OPEN: `prime-header--open`,
+  DEFAULT: `prime-header`,
 };
 
 const PrimeHeader = () => {
-  const [contentClass, setContentClass] = React.useState(CustomClass.DEFAULT);
+  const [headerClass, setHeaderClass] = React.useState(CustomClass.DEFAULT);
 
   const [isPopupOpen, setPopupStatus] = React.useState(false);
 
@@ -18,10 +19,18 @@ const PrimeHeader = () => {
       (evt) => {
         evt.preventDefault();
 
-        setContentClass((currentClass) => {
-          return currentClass === CustomClass.DEFAULT
-            ? `${CustomClass.DEFAULT} ${CustomClass.OPEN}`
-            : CustomClass.DEFAULT;
+        setHeaderClass((currentClass) => {
+          const isClose = currentClass === CustomClass.DEFAULT;
+
+          if (isClose) {
+            hidePageScrollbar();
+
+            return `${CustomClass.DEFAULT} ${CustomClass.OPEN}`;
+          }
+
+          displayPageScrollbar();
+
+          return CustomClass.DEFAULT;
         });
       },
       []
@@ -31,7 +40,9 @@ const PrimeHeader = () => {
       (evt) => {
         evt.preventDefault();
 
-        setContentClass(CustomClass.DEFAULT);
+        displayPageScrollbar();
+
+        setHeaderClass(CustomClass.DEFAULT);
       },
       []
   );
@@ -46,9 +57,9 @@ const PrimeHeader = () => {
   );
 
   return (
-    <header className="prime-header">
+    <header className={headerClass}>
       <div
-        className={contentClass}
+        className="prime-header__content"
       >
         <button
           className="prime-header__toggle-button"

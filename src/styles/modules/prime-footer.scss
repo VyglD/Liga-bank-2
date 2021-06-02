@@ -193,68 +193,85 @@
 
 @media (min-width: $desktop-breakpoint) {
   .prime-footer__content {
-    flex-wrap: nowrap;
+    position: relative;
+
+    display: grid;
+    grid-template:
+      "logo nav phone-one phone-two places"
+      "copyright nav phone-one phone-two places"
+      ". nav phone-one phone-two places";
     justify-content: space-between;
   }
 
   .prime-footer__logo {
-    order: 0;
+    grid-area: logo;
 
     width: 149px;
-    height: 25px;
     margin: 0;
   }
 
   .prime-footer__nav {
-    order: 0;
+    grid-area: nav;
 
     width: auto;
     margin: 0;
   }
 
   .prime-footer__nav-links-list {
-    margin: 0;
-    margin-top: -4px;
-    margin-left: 121px;
+    margin: -5px 0 0 18px;
   }
 
   .prime-footer__phone-wrapper {
-    max-width: 200px;
+    width: auto;
+    margin: 0;
 
-    &--one,
+    &--one {
+      grid-area: phone-one;
+
+      max-width: 200px;
+      margin: 3px 0 0 21px;
+    }
+
     &--two {
-      order: 0;
+      grid-area: phone-two;
 
-      width: auto;
-      margin: 0;
+      max-width: 160px;
+      margin: 1px 0 0 13px;
     }
   }
 
   .prime-footer__phone-details {
     max-width: none;
+    margin-right: 0;
   }
 
   .prime-footer__places-list {
-    order: 0;
+    grid-area: places;
+    justify-self: end;
 
     width: auto;
+    max-width: 180px;
     margin: 0;
-    margin-top: 4px;
-    margin-right: -16px;
+    margin-top: 5px;
   }
 
   .prime-footer__place-link {
-    padding-right: 15px;
+    justify-content: flex-end;
+
+    padding-left: 15px;
+    padding-right: 0;
   }
 
   .prime-footer__copyright {
-    position: absolute;
-    top: 87px;
-    left: var(--padding);
+    position: relative;
+    top: 0;
+    left: 0;
 
-    order: 0;
+    grid-area: copyright;
 
-    width: 256px;
     padding: 0;
+    margin: 0;
+    max-width: 253px;
+    margin-top: 14px;
   }
 }

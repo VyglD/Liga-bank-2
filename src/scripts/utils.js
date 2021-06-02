@@ -71,6 +71,18 @@ const createFormatedValueString = (value, postfix) => {
   return `${getFormatedDigitString(value)}${postfix}`;
 };
 
+const hidePageScrollbar = () => {
+  const paddingOffset = `${window.innerWidth - document.body.offsetWidth}px`;
+
+  document.body.style.paddingRight = paddingOffset;
+  document.body.style.overflow = `hidden`;
+};
+
+const displayPageScrollbar = () => {
+  document.body.style.paddingRight = `0`;
+  document.body.style.overflow = `auto`;
+};
+
 export {
   getFocusableElements,
   getNextArrayIndex,
@@ -80,4 +92,6 @@ export {
   getCleanDigit,
   getFormatedDigitString,
   createFormatedValueString,
+  hidePageScrollbar,
+  displayPageScrollbar,
 };

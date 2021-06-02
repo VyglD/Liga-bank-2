@@ -1,9 +1,10 @@
 .departments {
-  box-sizing: border-box;
-  width: 100%;
   max-width: $desktop-max-content;
-  padding: 10px 0 110px;
   margin: 76px auto 0;
+
+  padding: 10px var(--padding) 110px;
+  box-sizing: content-box;
+  width: calc(100% - 2 * var(--padding));
 }
 
 .departments__title {
@@ -23,6 +24,8 @@
 
 @media (max-width: $tablet) {
   .departments {
+    box-sizing: border-box;
+    width: 100%;
     padding-bottom: 57px;
     margin-top: 49px;
 

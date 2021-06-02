@@ -291,7 +291,7 @@ const CalculatorApplication = (props) => {
       </ul>
       <form
         className={formClass}
-        action=""
+        action="https://echo.htmlacademy.ru/"
         method="post"
         onSubmit={handleFormSubmit}
         onAnimationEnd={() => setFormClass(CustomClass.DEFAULT_FORM)}

@@ -168,8 +168,8 @@ const CalculatorInput = (props) => {
           className={inputClassName}
           type="text"
           value={currentValue}
-          min={minValue}
-          max={maxValue}
+          data-min={minValue}
+          data-max={maxValue}
           id={inputId}
           onKeyDown={handleKeydown}
           onInput={handleInput}

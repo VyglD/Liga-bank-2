@@ -4,22 +4,12 @@ import {
   getFocusableElements,
   getNextArrayIndex,
   getPreviousArrayIndex,
+  hidePageScrollbar,
+  displayPageScrollbar,
 } from "../../utils";
 import {Key} from "../../constants";
 
 const POPUP_CLASS = `popup`;
-
-const hidePageScrollbar = () => {
-  const paddingOffset = `${window.innerWidth - document.body.offsetWidth}px`;
-
-  document.body.style.paddingRight = paddingOffset;
-  document.body.style.overflow = `hidden`;
-};
-
-const displayPageScrollbar = () => {
-  document.body.style.paddingRight = `0`;
-  document.body.style.overflow = `auto`;
-};
 
 const Popup = (props) => {
   const {
