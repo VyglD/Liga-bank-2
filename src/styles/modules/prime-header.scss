@@ -336,18 +336,10 @@
     border: none;
     outline: none;
 
-    & span,
-    &::before,
-    &::after {
-      content: "";
-
-      display: block;
-
-      width: 100%;
-      height: 2px;
-
-      background-color: var(--color-black-0, black);
-    }
+    background-image: url("../../images/menu.svg");
+    background-position: center;
+    background-size: 16px 10px;
+    background-repeat: no-repeat;
   }
 
   .prime-header__logo {

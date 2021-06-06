@@ -27,6 +27,7 @@
 .services__service-title {
   margin: 0;
   max-width: 95%;
+  min-height: 44px;
 
   font-size: 16px;
   font-weight: 500;
@@ -102,8 +103,8 @@
 .services__service-button {
   width: 100%;
 
-  padding: 14px 20px 13px;
-  margin-top: 13px;
+  padding: 14px 20px 13px 14px;
+  margin-top: 12px;
 }
 
 .services__service-details {
@@ -115,6 +116,8 @@
 }
 
 .services__service-details-link {
+  display: inline-block;
+
   font-weight: 600;
   text-decoration: underline;
 }
@@ -229,6 +232,7 @@
   }
 
   .services__service-details {
+    max-width: 47%;
     margin-top: 30px;
 
     font-size: 16px;

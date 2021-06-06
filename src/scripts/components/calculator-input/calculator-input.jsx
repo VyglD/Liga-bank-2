@@ -42,6 +42,21 @@ const CalculatorInput = (props) => {
 
   const inputRef = React.useRef();
 
+  const applyBounds = React.useCallback(
+      (value) => {
+        if (value < minValue) {
+          return minValue;
+        }
+
+        if (value > maxValue) {
+          return maxValue;
+        }
+
+        return value;
+      },
+      [minValue, maxValue]
+  );
+
   const handleNewValue = React.useCallback(
       (newValue) => {
         const digitValue = getCleanDigit(newValue);
@@ -64,25 +79,23 @@ const CalculatorInput = (props) => {
   const handleIncrease = React.useCallback(
       () => {
         onCurrentValueChange((value) => {
-          value = getCleanDigit(value);
-          const newValue = value + stepValue;
+          const newValue = applyBounds(getCleanDigit(value) + stepValue);
 
           return createFormatedValueString(handleNewValue(newValue), postfix);
         });
       },
-      [onCurrentValueChange, stepValue, handleNewValue, postfix]
+      [onCurrentValueChange, stepValue, applyBounds, handleNewValue, postfix]
   );
 
   const handleDecrease = React.useCallback(
       () => {
         onCurrentValueChange((value) => {
-          value = getCleanDigit(value);
-          const newValue = value - stepValue;
+          const newValue = applyBounds(getCleanDigit(value) - stepValue);
 
           return createFormatedValueString(handleNewValue(newValue), postfix);
         });
       },
-      [onCurrentValueChange, stepValue, handleNewValue, postfix]
+      [onCurrentValueChange, stepValue, applyBounds, handleNewValue, postfix]
   );
 
   const handleInput = React.useCallback(

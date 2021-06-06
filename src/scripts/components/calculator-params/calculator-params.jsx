@@ -7,6 +7,7 @@ import {
   createFormatedValueString,
   getCleanDigit,
   getFormatedDigitString,
+  getCorrectDurationPostfix,
 } from "../../utils";
 import {Postfix, Percentage} from "../../constants";
 import {limitType, stepType} from "../../types";
@@ -45,23 +46,18 @@ const CalculatorParams = (props) => {
   const [
     currentFormatedDurationString,
     setCurrentFormatedDurationString
-  ] = React.useState(createFormatedValueString(DurationLimit.MIN, Postfix.DURATION));
+  ] = React.useState(
+      createFormatedValueString(
+          DurationLimit.MIN,
+          getCorrectDurationPostfix(DurationLimit.MIN)
+      )
+  );
 
   React.useEffect(
       () => {
-        const oldPayment = getCleanDigit(currentFormatedPaymentString);
-        let newPayment = oldPayment;
-
-        if (oldPayment < minPayment) {
-          newPayment = minPayment;
-        } else if (oldPayment > maxPayment) {
-          newPayment = maxPayment;
-        }
-
-        setCurrentFormatedPaymentString(createFormatedValueString(newPayment, Postfix.RUB));
+        setCurrentFormatedPaymentString(createFormatedValueString(minPayment, Postfix.RUB));
       },
-      /* eslint-disable-next-line react-hooks/exhaustive-deps */
-      [minPayment, maxPayment]
+      [minPayment]
   );
 
   const formateRangePayment = React.useCallback(
@@ -75,6 +71,36 @@ const CalculatorParams = (props) => {
         return createFormatedValueString(newValue, Postfix.PERCENT);
       },
       [maxPayment]
+  );
+
+  const formateRangeDuration = React.useCallback(
+      (value) => {
+        const digitValue = getCleanDigit(value);
+
+        return createFormatedValueString(
+            digitValue,
+            getCorrectDurationPostfix(digitValue)
+        );
+      },
+      []
+  );
+
+  const editDurationValue = React.useCallback(
+      (value) => {
+        if (typeof value === `string`) {
+          const digitValue = getCleanDigit(value);
+
+          return setCurrentFormatedDurationString(
+              createFormatedValueString(
+                  digitValue,
+                  getCorrectDurationPostfix(digitValue)
+              )
+          );
+        }
+
+        return setCurrentFormatedDurationString(value);
+      },
+      []
   );
 
   const cost = getCleanDigit(currentFormatedCostString);
@@ -144,8 +170,9 @@ const CalculatorParams = (props) => {
           strict={true}
           stepRange={Step.DURATION}
           rangeValue={currentFormatedDurationString}
-          onCurrentRangeValueChange={setCurrentFormatedDurationString}
+          onCurrentRangeValueChange={editDurationValue}
           rangeClass={`calculator-params__range--duration`}
+          formateRangeValue={formateRangeDuration}
         />
         {children}
       </div>

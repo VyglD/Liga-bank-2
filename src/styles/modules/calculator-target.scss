@@ -30,6 +30,10 @@
 .calculator-target__select-item {
   @include calculator-input;
 
+  max-width: none;
+
+  font-size: 16px;
+  line-height: 22px;
   text-align: left;
 
   background-color: transparent;

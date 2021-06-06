@@ -66,7 +66,7 @@ const PrimeHeader = () => {
           type="button"
           onClick={handleToggleButtonClick}
         >
-          <span>Показать, скрыть меню</span>
+          Показать, скрыть меню
         </button>
         <img
           className="prime-header__logo"

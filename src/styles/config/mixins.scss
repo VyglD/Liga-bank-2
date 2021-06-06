@@ -22,10 +22,19 @@
   max-width: 600px;
   padding: 19px 14px 17px;
 
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
-  line-height: 22px;
+  line-height: 25px;
 
   border: 1px solid var(--color-black-0, black);
   border-radius: 4px;
+
+  &::placeholder {
+    color: var(--color-black-3, gray);
+  }
+
+  @media (max-width: $tablet) {
+    font-size: 16px;
+    line-height: 22px;
+  }
 }

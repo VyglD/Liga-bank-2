@@ -7,6 +7,17 @@ import {Percentage, Postfix} from "../../constants";
 const MONTHS = 12;
 const MIN_WAGES_PAYMENT = 45;
 
+const formatPercentRate = (percentRate) => {
+  const [integer, fraction] = String(percentRate).split(`.`);
+  let result = integer;
+
+  if (fraction) {
+    result = [integer, fraction?.padEnd(2, `0`)].join(`,`);
+  }
+
+  return `${result}${Postfix.PERCENT}`;
+};
+
 const CalculatorOffer = (props) => {
   const {
     minAmount,
@@ -45,8 +56,7 @@ const CalculatorOffer = (props) => {
                   <p className="calculator-offer__param-title">Процентная ставка</p>
                   <p className="calculator-offer__param-value">
                     {
-                      createFormatedValueString(percentRate, Postfix.PERCENT)
-                        .replace(`.`, `,`)
+                      formatPercentRate(percentRate)
                     }
                   </p>
                 </li>

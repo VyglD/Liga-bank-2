@@ -1,4 +1,4 @@
-import {FOCUS_ELEMENTS, REGEX_DIGITS} from "./constants";
+import {FOCUS_ELEMENTS, REGEX_DIGITS, Postfix} from "./constants";
 
 const getFocusableElements = (container) => {
   return Array.from(
@@ -83,6 +83,26 @@ const displayPageScrollbar = () => {
   document.body.style.overflow = `auto`;
 };
 
+const getCorrectDurationPostfix = (value) => {
+  const digitValue = getCleanDigit(value);
+
+  if (digitValue > 10 && digitValue < 20) {
+    return Postfix.DURATION;
+  }
+
+  const ending = digitValue % 10;
+
+  if (ending === 1) {
+    return ` год`;
+  }
+
+  if ([2, 3, 4].includes(ending)) {
+    return ` года`;
+  }
+
+  return Postfix.DURATION;
+};
+
 export {
   getFocusableElements,
   getNextArrayIndex,
@@ -94,4 +114,5 @@ export {
   createFormatedValueString,
   hidePageScrollbar,
   displayPageScrollbar,
+  getCorrectDurationPostfix,
 };
